@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  develop:
+    image: develop
+    container_name: devel
+    user: ${USER_UID}:${USER_GID}
+    tty: true
+    env_file:
+      - .env
+    build:
+      context: .
+      args:
+      - USERNAME=${CONTAINER_USERNAME}
+      - USER=${CONTAINER_USERNAME}
+      - USER_UID=${USER_UID}
+      - USER_GID=${USER_GID}
+    network_mode: "host"
+    volumes:
+      - ${WORKSPACE}:/home/${CONTAINER_USERNAME}/workspace:rw
+      - ${HOME}/.ssh:/home/${CONTAINER_USERNAME}/.ssh
+      - ${HOME}/.gitconfig:/home/${CONTAINER_USERNAME}/.gitconfig
+      - ${HOME}/.zshrc:/home/${CONTAINER_USERNAME}/.zshrc:ro
+    entrypoint: '/bin/zsh'

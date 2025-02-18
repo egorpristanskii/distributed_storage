@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "intelliSenseMode": "linux-clang-x64",
+            "includePath": [
+                "${workspaceFolder}/include",
+                "/home/devel/.conan2/p/b/boost5d676bd60878f/p/include"
+            ],
+            "compilerPath": "/usr/bin/clang++-19",
+            "cStandard": "c11",
+            "cppStandard": "c++20"
+        }
+    ],
+    "version": 4
+}

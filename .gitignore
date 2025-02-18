@@ -1,7 +1,7 @@
 # Prerequisites
 *.d
 *build
-*.env
+docker/.env
 
 # Compiled Object files
 *.slo

@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.15)
+project(BoostAsioExample LANGUAGES CXX)
+
+# Enable C++20
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+set(CMAKE_CXX_CLANG_TIDY "clang-tidy-19;--config-file=/home/devel/workspace/project/cpplearning/.clang-tidy")
+
+# Include Conan-generated files
+include(${CMAKE_BINARY_DIR}/conan/conan_toolchain.cmake)
+
+# Find Boost Asio (header-only, no need to link)
+find_package(Boost REQUIRED COMPONENTS asio algorithm)
+

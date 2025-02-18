@@ -76,10 +76,15 @@
         "typeindex": "cpp"
     },
     "clangd.path": "/usr/bin/clangd-19",
-    "cmake.sourceDirectory": "/home/devel/workspace/project/cpplearning",
-    "cmake.generator": "Ninja",
+    "cmake.sourceDirectory": "/home/devel/workspace",
     "DockerRun.DisableDockerrc": true,
-    "C_Cpp.default.compilerPath": "/usr/bin/clang-19",
+    "cmake.configureOnOpen": true,
+    "cmake.useCMakePresets": "always",
+    "cmake.configurePreset": "conan-release",
+    "cmake.buildPreset": "conan-release",
+    "cmake.generator": "Ninja",
+    "C_Cpp.default.compilerPath": "/usr/bin/clang++-19",
+    "C_Cpp.default.intelliSenseMode": "clang-x64",
     "cmake.environment": {
         "CC": "/usr/bin/clang-19",
         "CXX": "/usr/bin/clang++-19"

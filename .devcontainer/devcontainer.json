@@ -7,7 +7,7 @@
         "../docker/docker-compose.yml"
     ],
     "service": "develop",
-    "workspaceFolder": "/home/devel/workspace/project/cpplearning",
+    "workspaceFolder": "/home/devel/workspace",
     "shutdownAction": "stopCompose",
 	"features": {},
 	"customizations": {

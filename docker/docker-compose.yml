@@ -11,14 +11,14 @@ services:
     build:
       context: .
       args:
-      - USERNAME=${CONTAINER_USERNAME}
-      - USER=${CONTAINER_USERNAME}
+      - USERNAME=devel
+      - USER=devel
       - USER_UID=${USER_UID}
       - USER_GID=${USER_GID}
     network_mode: "host"
     volumes:
-      - ${WORKSPACE}:/home/${CONTAINER_USERNAME}/workspace:rw
-      - ${HOME}/.ssh:/home/${CONTAINER_USERNAME}/.ssh
-      - ${HOME}/.gitconfig:/home/${CONTAINER_USERNAME}/.gitconfig
-      - ${HOME}/.zshrc:/home/${CONTAINER_USERNAME}/.zshrc:ro
+      - ${WORKSPACE}:/home/devel/workspace:rw
+      - ${HOME}/.ssh:/home/devel/.ssh
+      - ${HOME}/.gitconfig:/home/devel/.gitconfig
+      - ${HOME}/.zshrc:/home/devel/.zshrc:ro
     entrypoint: '/bin/zsh'

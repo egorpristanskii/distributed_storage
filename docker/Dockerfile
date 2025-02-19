@@ -49,8 +49,8 @@ WORKDIR /home/${USERNAME}/.oh-my-zsh/plugins
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions.git && \
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
 
-# Install and setup Conan
-RUN pip install conan --break-system-packages
+# Install and setup Conan and pre-commit
+RUN pip install conan pre-commit --break-system-packages
 RUN ~/.local/bin/conan profile detect
 
 WORKDIR /home/${USERNAME}/.conan2/profiles

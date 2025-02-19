@@ -3,10 +3,13 @@ repos:
     rev: v19.1.0
     hooks:
       - id: clang-format
+        language: system
         args:
           - "-style=file"
           - "-i"
-        types: [c, c++]
+        entry: /usr/bin/clang-format-19
+        files: \.(c|cpp|cxx|cc|h|hpp|hxx|hh)$
+
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0

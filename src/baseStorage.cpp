@@ -1,5 +1,5 @@
-#include <mutex>
 #include "baseStorage.h"
+#include <mutex>
 
 namespace storage {
 bool BaseStorage::put(const std::string& key, const std::string& value) {
@@ -16,6 +16,7 @@ bool BaseStorage::remove(const std::string& key) {
     }
     return false;
 }
+
 std::string BaseStorage::get(const std::string& key) {
     std::lock_guard<std::mutex> lock_guard(mtx_);
     if (storage_.find(key) != storage_.end()) {

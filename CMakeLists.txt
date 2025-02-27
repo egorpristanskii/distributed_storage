@@ -11,7 +11,7 @@ set(CMAKE_CXX_CLANG_TIDY "clang-tidy-19;--config-file=/home/devel/workspace/.cla
 # Include Conan-generated files
 include(${CMAKE_BINARY_DIR}/conan/conan_toolchain.cmake)
 
-add_library(basestorage STATIC src/baseStorage.cpp)
+add_library(basestorage STATIC src/base_storage.cpp)
 target_include_directories(basestorage PUBLIC include)
 
 # Find Boost Asio (header-only, no need to link)

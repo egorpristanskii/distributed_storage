@@ -3,10 +3,9 @@
 #include "storage.h"
 
 #include <shared_mutex>
-#include <unordered_map>
 
 namespace storage {
-class StringStorage : public Storage {
+class StringStorage : public Storage<std::string> {
    public:
     bool put(const std::string& key, const std::string& value) override;
     bool remove(const std::string& key) override;
@@ -15,7 +14,6 @@ class StringStorage : public Storage {
     ~StringStorage() override = default;
 
    protected:
-    std::unordered_map<std::string, std::string> storage_;
     std::shared_mutex mtx_;
 };
 }  // namespace storage

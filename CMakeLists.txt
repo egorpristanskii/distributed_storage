@@ -11,8 +11,11 @@ set(CMAKE_CXX_CLANG_TIDY "clang-tidy-19;--config-file=/home/devel/workspace/.cla
 # Include Conan-generated files
 include(${CMAKE_BINARY_DIR}/conan/conan_toolchain.cmake)
 
+find_package(nlohmann_json REQUIRED)
+
 add_library(stringstorage STATIC src/string_storage.cpp)
 target_include_directories(stringstorage PUBLIC include)
+target_link_libraries(stringstorage PRIVATE nlohmann_json::nlohmann_json)
 
 # Find Boost Asio (header-only, no need to link)
 # find_package(Boost REQUIRED COMPONENTS asio algorithm)

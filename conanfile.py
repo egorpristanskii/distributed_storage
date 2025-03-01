@@ -8,7 +8,8 @@ class BoostGTestConan(ConanFile):
     # Add dependencies: Boost (with asio) and GTest 1.15.0
     requires = (
         "boost/1.83.0",
-        "gtest/1.15.0"
+        "gtest/1.15.0",
+        "nlohmann_json/3.11.3",
     )
 
     # Use modern Conan generators
@@ -34,7 +35,12 @@ class BoostGTestConan(ConanFile):
         cmake.install()
 
     def package_info(self):
-        self.cpp_info.libs = ["boost", "gtest", "gtest_main"]
+        self.cpp_info.libs = [
+            "boost",
+            "gtest",
+            "gtest_main",
+            "nlohmann_json",
+        ]
 
 # For install run
 # conan install . --output-folder=build --build=missing

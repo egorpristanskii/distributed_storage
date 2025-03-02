@@ -1,26 +1,17 @@
 #include "string_storage.h"
-#include <filesystem>
-#include <fstream>
+
+#include "wal_logger.h"
+
+#include <memory>
 #include <nlohmann/json.hpp>
 
 namespace storage {
+StringStorage::StringStorage(const std::string& logFile)
+    : operation_logger_(std::make_unique<WALLogger>(logFile)) {}
+
 bool StringStorage::put(const std::string& key, const std::string& value) {
     std::unique_lock<std::shared_mutex> lock_guard(mtx_);
-    if (!std::filesystem::exists("/tmp/data.json")) {
-        std::ofstream file("/tmp/data.json", std::ios::out);
-        file << "[]";
-    }
-
-    std::ifstream in_file("/tmp/data.json");
-    nlohmann::json wal;
-    in_file >> wal;
-    in_file.close();
-    nlohmann::json entry = {
-        {"key", key}, {"value", value}, {"operation", "PUT"}};
-    wal.push_back(entry);
-    std::ofstream out_file("/tmp/data.json", std::ios::trunc);
-    out_file << wal.dump(4);
-    out_file.flush();
+    operation_logger_->logOperation("PUT", key, value);
     storage_[key] = value;
     return true;
 }
@@ -29,6 +20,7 @@ bool StringStorage::remove(const std::string& key) {
     std::unique_lock<std::shared_mutex> lock_guard(mtx_);
     if (storage_.find(key) != storage_.end()) {
         storage_.erase(key);
+        operation_logger_->logOperation("DELETE", key, "");
         return true;
     }
     return false;

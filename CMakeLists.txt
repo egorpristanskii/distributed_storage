@@ -13,7 +13,7 @@ include(${CMAKE_BINARY_DIR}/conan/conan_toolchain.cmake)
 
 find_package(nlohmann_json REQUIRED)
 
-add_library(stringstorage STATIC src/string_storage.cpp src/wal_logger.cpp)
+add_library(stringstorage STATIC src/storage.cpp src/wal_logger.cpp)
 target_include_directories(stringstorage PUBLIC include)
 target_link_libraries(stringstorage PUBLIC nlohmann_json::nlohmann_json)
 

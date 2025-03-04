@@ -1,22 +1,21 @@
-#include "string_storage.h"
+#include "storage.h"
 
-#include "wal_logger.h"
+#include "value.h"
 
-#include <memory>
 #include <nlohmann/json.hpp>
 
 namespace storage {
-StringStorage::StringStorage(const std::string& logFile)
+Storage::Storage(const std::string& logFile)
     : operation_logger_(std::make_unique<WALLogger>(logFile)) {}
 
-bool StringStorage::put(const std::string& key, const std::string& value) {
+bool Storage::put(const std::string& key, ValuePtr value) {
     std::unique_lock<std::shared_mutex> lock_guard(mtx_);
-    operation_logger_->logOperation("PUT", key, value);
-    storage_[key] = value;
+    operation_logger_->logOperation("PUT", key, value->toString());
+    storage_[key] = std::move(value);
     return true;
 }
 
-bool StringStorage::remove(const std::string& key) {
+bool Storage::remove(const std::string& key) {
     std::unique_lock<std::shared_mutex> lock_guard(mtx_);
     if (storage_.find(key) != storage_.end()) {
         storage_.erase(key);
@@ -26,11 +25,17 @@ bool StringStorage::remove(const std::string& key) {
     return false;
 }
 
-std::string StringStorage::get(const std::string& key) {
+ValuePtr Storage::get(const std::string& key) {
     std::shared_lock<std::shared_mutex> lock_guard(mtx_);
     if (storage_.find(key) != storage_.end()) {
-        return storage_[key];
+        return storage_[key]->cloneData();
     }
-    return "";
+    return nullptr;
 }
+
+// void Storage::delegate() {
+//     auto self = this->shared_from_this();
+//     std::cout << "Delegate string storage" << std::endl;
+// }
+
 }  // namespace storage

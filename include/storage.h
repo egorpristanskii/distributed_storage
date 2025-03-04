@@ -1,19 +1,25 @@
 #pragma once
 
+#include "value.h"
+#include "wal_logger.h"
+
+#include <memory>
+#include <shared_mutex>
 #include <string>
 #include <unordered_map>
 
 namespace storage {
-template <typename T>
 class Storage {
    public:
-    virtual bool put(const std::string& key, const T& value) = 0;
-    virtual bool remove(const std::string& key) = 0;
-    virtual T get(const std::string& key) = 0;
+    explicit Storage(const std::string& logFile);
 
-    virtual ~Storage() = default;
+    bool put(const std::string& key, ValuePtr value);
+    bool remove(const std::string& key);
+    std::unique_ptr<Value> get(const std::string& key);
 
    protected:
-    std::unordered_map<std::string, T> storage_;
+    std::unordered_map<std::string, ValuePtr> storage_;
+    std::unique_ptr<WALLogger> operation_logger_;
+    std::shared_mutex mtx_;
 };
 }  // namespace storage

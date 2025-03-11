@@ -15,7 +15,7 @@ WALLogger::WALLogger(const std::string& logFile)
 
 void WALLogger::logOperation(const std::string& operation,
                              const std::string& key, const std::string& value,
-                             const std::string& typeName) {
+                             const std::string_view& typeName) {
     std::unique_lock<std::mutex> lock_guard(mtx_);
     std::ofstream file(logFile_, std::ios::app);
     json entry = {{"timestamp", getUTCTimeStamp()},

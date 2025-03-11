@@ -12,12 +12,12 @@ class Value {
     virtual ~Value() = default;
     virtual std::string toString() const = 0;
     virtual std::unique_ptr<Value> cloneData() const = 0;
-    virtual std::string typeName() = 0;
+    virtual std::string_view typeName() = 0;
 };
 
 using ValuePtr = std::unique_ptr<Value>;
 
-template <typename TData, StringLiteral TName>
+template <typename TData, NamedType TName = TypeName<TData>::kValue>
 class TypedData : public Value {
    public:
     explicit TypedData(TData data) : data_(std::move(data)) {}
@@ -34,12 +34,12 @@ class TypedData : public Value {
         return std::make_unique<TypedData<TData, TName>>(data_);
     }
 
-    std::string typeName() override { return TName.value; }
+    [[nodiscard]] std::string_view typeName() override { return TName.view(); }
 
    protected:
     TData data_;
 };
 
-using StringData = TypedData<std::string, StringLiteral{"string"}>;
-using IntData = TypedData<int, StringLiteral{"int"}>;
+using StringData = TypedData<std::string>;
+using IntData = TypedData<int>;
 }  // namespace storage

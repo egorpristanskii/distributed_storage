@@ -1,5 +1,7 @@
 #pragma once
 
+#include "types.h"
+
 #include <memory>
 #include <string>
 #include <type_traits>
@@ -10,12 +12,12 @@ class Value {
     virtual ~Value() = default;
     virtual std::string toString() const = 0;
     virtual std::unique_ptr<Value> cloneData() const = 0;
-    virtual std::unique_ptr<Value> cloneFromString(const std::string& data) = 0;
+    virtual std::string typeName() = 0;
 };
 
 using ValuePtr = std::unique_ptr<Value>;
 
-template <typename TData>
+template <typename TData, StringLiteral TName>
 class TypedData : public Value {
    public:
     explicit TypedData(TData data) : data_(std::move(data)) {}
@@ -29,16 +31,15 @@ class TypedData : public Value {
     }
 
     ValuePtr cloneData() const override {
-        return std::make_unique<TypedData<TData>>(data_);
+        return std::make_unique<TypedData<TData, TName>>(data_);
     }
 
-    ValuePtr cloneFromString(const std::string& data) override {
-        return std::make_unique<TData>(static_cast<TData>(data));
-    }
+    std::string typeName() override { return TName.value; }
 
    protected:
     TData data_;
 };
 
-using StringData = TypedData<std::string>;
+using StringData = TypedData<std::string, StringLiteral{"string"}>;
+using IntData = TypedData<int, StringLiteral{"int"}>;
 }  // namespace storage

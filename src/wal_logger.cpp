@@ -14,13 +14,15 @@ WALLogger::WALLogger(const std::string& logFile)
 }
 
 void WALLogger::logOperation(const std::string& operation,
-                             const std::string& key, const std::string& value) {
+                             const std::string& key, const std::string& value,
+                             const std::string& typeName) {
     std::unique_lock<std::mutex> lock_guard(mtx_);
     std::ofstream file(logFile_, std::ios::app);
     json entry = {{"timestamp", getUTCTimeStamp()},
                   {"operation", operation},
                   {"key", key},
-                  {"value", value}};
+                  {"value", value},
+                  {"typename", typeName}};
     file << entry.dump() << std::endl;
     file.flush();
 }

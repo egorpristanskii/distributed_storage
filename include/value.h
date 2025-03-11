@@ -17,10 +17,18 @@ class Value {
 
 using ValuePtr = std::unique_ptr<Value>;
 
+template <typename TData>
+concept NotString = !std::same_as<TData, std::string>;
+
 template <typename TData, NamedType TName = TypeName<TData>::kValue>
 class TypedData : public Value {
    public:
     explicit TypedData(TData data) : data_(std::move(data)) {}
+
+    template <NotString Udata = TData>
+    explicit TypedData(const std::string& data) : data_(fromString(data)) {}
+
+    inline TData fromString(const std::string& data);
 
     std::string toString() const override {
         if constexpr (std::is_same_v<TData, std::string>) {
@@ -31,7 +39,7 @@ class TypedData : public Value {
     }
 
     ValuePtr cloneData() const override {
-        return std::make_unique<TypedData<TData, TName>>(data_);
+        return std::make_unique<TypedData<TData>>(data_);
     }
 
     [[nodiscard]] std::string_view typeName() override { return TName.view(); }
@@ -39,6 +47,16 @@ class TypedData : public Value {
    protected:
     TData data_;
 };
+
+template <>
+inline int TypedData<int>::fromString(const std::string& data) {
+    return std::stoi(data);
+}
+
+template <>
+inline std::string TypedData<std::string>::fromString(const std::string& data) {
+    return data;
+}
 
 using StringData = TypedData<std::string>;
 using IntData = TypedData<int>;

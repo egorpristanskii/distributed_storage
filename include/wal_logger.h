@@ -14,8 +14,7 @@ class WALLogger {
                       const std::string& value,
                       const std::string_view& typeName);
 
-    // TODO(e_pristanskiy) fix with template or remove template
-    // void recoverFromLog(const std::shared_ptr<StringStorage>& storage_visitor);
+    // void recoverFromLog();
 
    protected:
     std::string logFile_;

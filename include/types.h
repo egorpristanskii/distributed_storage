@@ -2,9 +2,12 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <map>
 #include <string_view>
 
 namespace storage {
+constexpr char kIntTypeName[]{"int"};
+constexpr char kStringTypeName[]{"std::string"};
 
 template <size_t Length>
 class NamedType {
@@ -27,12 +30,32 @@ struct TypeName;
 
 template <>
 struct TypeName<int> {
-    static constexpr NamedType kValue = NamedType{"int"};
+    static constexpr NamedType kValue = NamedType{kIntTypeName};
 };
 
 template <>
 struct TypeName<std::string> {
-    static constexpr NamedType kValue = NamedType{"std::string"};
+    static constexpr NamedType kValue = NamedType{kStringTypeName};
 };
+
+enum class TypeNameEnum { IntType, StringType };
+
+enum class OperationEnum { Put, Delete, Get };
+
+const std::map<std::string_view, TypeNameEnum> kStringToType = {
+    {kIntTypeName, TypeNameEnum::IntType},
+    {kStringTypeName, TypeNameEnum::StringType},
+};
+
+const std::map<std::string_view, OperationEnum> kStringToOperation = {
+    {"PUT", OperationEnum::Put},
+    {"DELETE", OperationEnum::Delete},
+    {"GET", OperationEnum::Get},
+};
+
+// Used for restoring data from log file.
+// Recover converts to map with structure
+// {"key": {"dataType": "value"}}
+using LogOperation = std::map<std::string, std::pair<std::string, std::string>>;
 
 }  // namespace storage

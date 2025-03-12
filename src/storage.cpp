@@ -1,12 +1,36 @@
 #include "storage.h"
 
+#include "types.h"
 #include "value.h"
 
+#include <iostream>
 #include <nlohmann/json.hpp>
 
 namespace storage {
 Storage::Storage(const std::string& logFile)
-    : operation_logger_(std::make_unique<WALLogger>(logFile)) {}
+    : operation_logger_(std::make_unique<WALLogger>(logFile)) {
+    auto recovery_log = operation_logger_->recoverFromLog();
+    for (const auto& [key, typed_value] : recovery_log) {
+        auto type_it = kStringToType.find(typed_value.first);
+        if (type_it != kStringToType.end()) {
+            switch (type_it->second) {
+                case TypeNameEnum::StringType:
+                    storage_[key] =
+                        std::make_unique<StringData>(typed_value.second);
+                    break;
+                case TypeNameEnum::IntType:
+                    storage_[key] =
+                        std::make_unique<IntData>(typed_value.second);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    for (const auto& [key, value] : storage_) {
+        std::cout << key << " " << value->toString() << std::endl;
+    }
+}
 
 bool Storage::put(const std::string& key, ValuePtr value) {
     std::unique_lock<std::shared_mutex> lock_guard(mtx_);
@@ -33,10 +57,4 @@ ValuePtr Storage::get(const std::string& key) {
     }
     return nullptr;
 }
-
-// void Storage::delegate() {
-//     auto self = this->shared_from_this();
-//     std::cout << "Delegate string storage" << std::endl;
-// }
-
 }  // namespace storage

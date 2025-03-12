@@ -1,5 +1,7 @@
 #pragma once
 
+#include "types.h"
+
 #include <mutex>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -14,9 +16,11 @@ class WALLogger {
                       const std::string& value,
                       const std::string_view& typeName);
 
-    // void recoverFromLog();
+    LogOperation recoverFromLog();
 
    protected:
+    static void processLog(LogOperation& operationMap, const json& logJson);
+
     std::string logFile_;
     std::mutex mtx_;
 };

@@ -25,7 +25,8 @@ repos:
         types: [file]
 
       - id: ctest
-        name: Run ctest before commit
-        entry: ctest --test-dir /home/devel/workspace/build/build-release/tests --output-on-failure --progress
+        name: Run cpp tests
+        entry: ctest --test-dir /home/devel/workspace/build/build-release/tests --progress
         language: system
-        types: []
+        pass_filenames: false
+        always_run: true

@@ -33,3 +33,6 @@ CMakeUserPresets.json
 *.exe
 *.out
 *.app
+
+# Ctest output
+*Testing

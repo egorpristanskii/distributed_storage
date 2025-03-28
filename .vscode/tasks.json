@@ -50,6 +50,40 @@
                 "clear": true
             },
 			"dependsOn": ["CMake Conan Configure"]
+        },
+        {
+            "label": "CMake Conan Configure with tests",
+            "type": "shell",
+            "command": "cmake --preset=conan-release -DENABLE_TESTS=ON",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+			"dependsOn": ["Conan Install"]
+        },
+        {
+            "label": "CMake Conan Build with test",
+            "type": "shell",
+            "command": "cmake --build --preset=conan-release -j8",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+			"dependsOn": ["CMake Conan Configure with tests"]
         }
     ]
 }

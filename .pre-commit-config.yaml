@@ -23,3 +23,9 @@ repos:
         entry: bash -c "find . -type f \( -name '*.h' -o -name '*.cpp' \) ! -path './build/*' | grep -E '[A-Z]|-' && exit 1 || exit 0"
         language: system
         types: [file]
+
+      - id: ctest
+        name: Run ctest before commit
+        entry: ctest --test-dir /home/devel/workspace/build/build-release/tests --output-on-failure --progress
+        language: system
+        types: []

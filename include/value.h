@@ -12,7 +12,7 @@ class Value {
     virtual ~Value() = default;
     virtual std::string toString() const = 0;
     virtual std::unique_ptr<Value> cloneData() const = 0;
-    virtual std::string_view typeName() = 0;
+    virtual std::string_view typeName() const noexcept = 0;
 };
 
 using ValuePtr = std::unique_ptr<Value>;
@@ -28,7 +28,7 @@ class TypedData : public Value {
     template <NotString Udata = TData>
     explicit TypedData(const std::string& data) : data_(fromString(data)) {}
 
-    inline TData fromString(const std::string& data);
+    inline TData fromString(const std::string& data) noexcept;
 
     std::string toString() const override {
         if constexpr (std::is_same_v<TData, std::string>) {
@@ -42,19 +42,22 @@ class TypedData : public Value {
         return std::make_unique<TypedData<TData>>(data_);
     }
 
-    [[nodiscard]] std::string_view typeName() override { return TName.view(); }
+    [[nodiscard]] std::string_view typeName() const noexcept override {
+        return TName.view();
+    }
 
    protected:
     TData data_;
 };
 
 template <>
-inline int TypedData<int>::fromString(const std::string& data) {
+inline int TypedData<int>::fromString(const std::string& data) noexcept {
     return std::stoi(data);
 }
 
 template <>
-inline std::string TypedData<std::string>::fromString(const std::string& data) {
+inline std::string TypedData<std::string>::fromString(
+    const std::string& data) noexcept {
     return data;
 }
 

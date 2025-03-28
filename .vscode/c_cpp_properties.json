@@ -5,8 +5,9 @@
             "intelliSenseMode": "linux-clang-x64",
             "includePath": [
                 "${workspaceFolder}/include",
-                "/home/devel/.conan2/p/b/boost5d676bd60878f/p/include",
-                "/home/devel/.conan2/p/nlohm0567ffc90cfc1/p/include"
+                "/home/devel/.conan2/p/asiof11004f89aeff/p/include",
+                "/home/devel/.conan2/p/nlohm0567ffc90cfc1/p/include",
+                "/home/devel/.conan2/p/b/gtest153f95ddd48b5/p/include"
             ],
             "compilerPath": "/usr/bin/clang++-19",
             "cStandard": "c11",

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <mutex>
+#include <stdexcept>
 #include <string>
 
 namespace storage {
@@ -46,6 +47,7 @@ void WALLogger::processLog(LogOperation& operationMap, const json& logJson) {
                 operationMap.erase(key);
             break;
         default:
+            throw std::invalid_argument("Unknown operation");
             break;
     }
 }

@@ -1,4 +1,5 @@
 #include "storage.h"
+#include "wal_logger.h"
 
 #include <filesystem>
 #include <gtest/gtest.h>
@@ -67,6 +68,25 @@ TEST_F(StorageTest, RecoveryFromLog) {
     auto value2 = recovered_storage.get("key2");
     ASSERT_NE(value2, nullptr);
     EXPECT_EQ(value2->toString(), "42");
+}
+
+TEST_F(StorageTest, listAllData) {
+    Storage storage(kTestLogFile_);
+    storage.put("key1", std::make_unique<StringData>("value1"));
+    storage.put("key2", std::make_unique<IntData>("42"));
+
+    storage::json data = storage.listAllData();
+
+    ASSERT_TRUE(data.contains("key1"));
+    ASSERT_TRUE(data.contains("key2"));
+    ASSERT_EQ(data.size(), 2);
+    ASSERT_EQ(data["key1"].size(), 2);
+    ASSERT_EQ(data["key2"].size(), 2);
+    EXPECT_EQ(data["key1"]["type"], "std::string");
+    EXPECT_EQ(data["key1"]["value"], "value1");
+    ASSERT_EQ(data["key1"].size(), 2);
+    EXPECT_EQ(data["key2"]["type"], "int");
+    EXPECT_EQ(data["key2"]["value"], "42");
 }
 
 }  // namespace

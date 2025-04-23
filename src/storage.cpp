@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <string>
+#include <string_view>
 
 namespace storage {
 Storage::Storage(const std::string& logFile)
@@ -56,5 +58,13 @@ ValuePtr Storage::get(const std::string& key) {
         return storage_[key]->cloneData();
     }
     return nullptr;
+}
+
+json Storage::listAllData() const {
+    json response;
+    for (const auto& [key, value] : storage_) {
+        response[key] = value->mapView();
+    }
+    return response;
 }
 }  // namespace storage

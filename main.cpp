@@ -13,5 +13,6 @@ int main() {
     storage->remove("456");
     storage->put("456",
                  std::make_unique<storage::StringData>("random string2"));
+    std::cout << storage->listAllData().dump(4) << std::endl;
     return 0;
 }

@@ -13,6 +13,8 @@ class Value {
     virtual std::string toString() const = 0;
     virtual std::unique_ptr<Value> cloneData() const = 0;
     virtual std::string_view typeName() const noexcept = 0;
+    [[nodiscard]] virtual std::map<std::string, std::string> mapView()
+        const = 0;
 };
 
 using ValuePtr = std::unique_ptr<Value>;
@@ -40,6 +42,10 @@ class TypedData : public Value {
 
     ValuePtr cloneData() const override {
         return std::make_unique<TypedData<TData>>(data_);
+    }
+
+    [[nodiscard]] std::map<std::string, std::string> mapView() const override {
+        return {{"value", toString()}, {"type", std::string(typeName())}};
     }
 
     [[nodiscard]] std::string_view typeName() const noexcept override {

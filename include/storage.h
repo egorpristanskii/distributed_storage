@@ -16,6 +16,7 @@ class Storage {
     bool put(const std::string& key, ValuePtr value);
     bool remove(const std::string& key);
     std::unique_ptr<Value> get(const std::string& key);
+    json listAllData() const;
 
    protected:
     std::unordered_map<std::string, ValuePtr> storage_;

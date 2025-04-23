@@ -35,3 +35,10 @@ TEST(TestValue, StringDataCloneData) {
     ASSERT_EQ(clone_value->toString(), "testdata");
     ASSERT_EQ(clone_value->typeName(), "std::string");
 }
+
+TEST(TestValue, MapView) {
+    storage::StringData value{"testdata"};
+    auto map_view = value.mapView();
+    ASSERT_EQ(map_view["value"], "testdata");
+    ASSERT_EQ(map_view["type"], "std::string");
+}

@@ -1,14 +1,12 @@
 {
     "version": "2.0.0",
     "tasks": [
+        // Release build chain
         {
-            "label": "Conan Install",
+            "label": "Conan Install Release",
             "type": "shell",
-            "command": "conan install . --output-folder=build --build=missing",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "command": "conan install . --output-folder=build --build=missing -s build_type=Release",
+            "group": "build",
             "problemMatcher": [],
             "presentation": {
                 "reveal": "always",
@@ -18,13 +16,10 @@
             }
         },
         {
-            "label": "CMake Conan Configure",
+            "label": "CMake Configure Release",
             "type": "shell",
             "command": "cmake --preset=conan-release",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "problemMatcher": [],
             "presentation": {
                 "reveal": "always",
@@ -32,16 +27,13 @@
                 "showReuseMessage": true,
                 "clear": true
             },
-			"dependsOn": ["Conan Install"]
+            "dependsOn": ["Conan Install Release"]
         },
         {
-            "label": "CMake Conan Build",
+            "label": "CMake Build Release",
             "type": "shell",
             "command": "cmake --build --preset=conan-release -j8",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "problemMatcher": [],
             "presentation": {
                 "reveal": "always",
@@ -49,16 +41,13 @@
                 "showReuseMessage": true,
                 "clear": true
             },
-			"dependsOn": ["CMake Conan Configure"]
+            "dependsOn": ["CMake Configure Release"]
         },
         {
-            "label": "CMake Conan Configure with tests",
+            "label": "CMake Configure Release with Tests",
             "type": "shell",
             "command": "cmake --preset=conan-release -DENABLE_TESTS=ON",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "problemMatcher": [],
             "presentation": {
                 "reveal": "always",
@@ -66,16 +55,13 @@
                 "showReuseMessage": true,
                 "clear": true
             },
-			"dependsOn": ["Conan Install"]
+            "dependsOn": ["Conan Install Release"]
         },
         {
-            "label": "CMake Conan Build with test",
+            "label": "CMake Build Release with Tests",
             "type": "shell",
             "command": "cmake --build --preset=conan-release -j8",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "problemMatcher": [],
             "presentation": {
                 "reveal": "always",
@@ -83,7 +69,78 @@
                 "showReuseMessage": true,
                 "clear": true
             },
-			"dependsOn": ["CMake Conan Configure with tests"]
+            "dependsOn": ["CMake Configure Release with Tests"]
+        },
+
+        // Debug build chain
+        {
+            "label": "Conan Install Debug",
+            "type": "shell",
+            "command": "conan install . --output-folder=build --build=missing -s build_type=Debug",
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "label": "CMake Configure Debug",
+            "type": "shell",
+            "command": "cmake --preset=conan-debug",
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "dependsOn": ["Conan Install Debug"]
+        },
+        {
+            "label": "CMake Build Debug",
+            "type": "shell",
+            "command": "cmake --build --preset=conan-debug -j8",
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "dependsOn": ["CMake Configure Debug"]
+        },
+        {
+            "label": "CMake Configure Debug with Tests",
+            "type": "shell",
+            "command": "cmake --preset=conan-debug -DENABLE_TESTS=ON",
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "dependsOn": ["Conan Install Debug"]
+        },
+        {
+            "label": "CMake Build Debug with Tests",
+            "type": "shell",
+            "command": "cmake --build --preset=conan-debug -j8",
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "dependsOn": ["CMake Configure Debug with Tests"]
         }
     ]
 }

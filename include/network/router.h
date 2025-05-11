@@ -1,4 +1,6 @@
 #pragma once
+#include "network/response.h"
+
 #include <functional>
 #include <map>
 #include <nlohmann/json.hpp>
@@ -7,7 +9,7 @@
 
 namespace router {
 using json = nlohmann::json;
-using Handler = std::function<std::string(const json&)>;
+using Handler = std::function<network::Response(const json&)>;
 
 template <typename TDelegator, typename THandler>
 concept ValidHandler = std::is_member_function_pointer_v<THandler>;
@@ -19,12 +21,13 @@ class Router {
     void addRoute(const std::string& path, TDelegator& delegator,
                   THandler handler) {
         routes_[path] = [&delegator,
-                         handler](const json& request) -> std::string {
+                         handler](const json& request) -> network::Response {
             return std::invoke(handler, delegator, request);
         };
     }
 
-    std::string handleRoute(const std::string& path, const json& request) {
+    network::Response handleRoute(const std::string& path,
+                                  const json& request) {
         return routes_[path](request);
     }
 

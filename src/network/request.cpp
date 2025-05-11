@@ -1,10 +1,10 @@
-#include "network/types.h"
+#include "network/request.h"
 
 #include <sstream>
 #include <string>
 
 namespace network {
-HTTPRequest::HTTPRequest(const std::string& raw_request) {
+Request::Request(const std::string& raw_request) {
     std::istringstream stream(raw_request);
 
     std::string line;

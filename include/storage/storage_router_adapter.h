@@ -1,5 +1,6 @@
 #pragma once
 
+#include "network/response.h"
 #include "storage/storage.h"
 
 namespace storage {
@@ -9,11 +10,11 @@ class StorageRouterAdapter {
 
     ~StorageRouterAdapter() = default;
 
-    std::string get(const json& request);
+    network::Response get(const json& request);
 
-    std::string put(const json& request);
+    network::Response put(const json& request);
 
-    std::string remove(const json& request);
+    network::Response remove(const json& request);
 
     //  std::string listAllData(const json& request);
    private:

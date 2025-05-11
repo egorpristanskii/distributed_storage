@@ -5,8 +5,12 @@ project(kvstorage LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# set(SANITIZER_FLAGS "-fsanitize=address -fno-omit-frame-pointer -g")
+# set(SANITIZER_FLAGS "-fsanitize=address,undefined,leak")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SANITIZER_FLAGS}")
 
-set(CMAKE_CXX_CLANG_TIDY "clang-tidy-19;--config-file=/home/devel/workspace/.clang-tidy")
+# set(CMAKE_CXX_CLANG_TIDY "clang-tidy-19;--config-file=/home/devel/workspace/.clang-tidy")
 
 # Include Conan-generated files
 include(${CMAKE_BINARY_DIR}/conan/conan_toolchain.cmake)
@@ -25,13 +29,16 @@ target_include_directories(kvstorage PUBLIC include)
 target_link_libraries(
     kvstorage
     PUBLIC
+     network
      nlohmann_json::nlohmann_json 
 )
+add_dependencies(kvstorage network)
 
 add_library(
     network
     STATIC
-     src/network/types.cpp
+     src/network/request.cpp
+     src/network/response.cpp
     )
 target_include_directories(network PUBLIC include)
 target_link_libraries(

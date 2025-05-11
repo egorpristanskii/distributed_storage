@@ -3,8 +3,8 @@
 #include <unordered_map>
 
 namespace network {
-struct HTTPRequest {
-    explicit HTTPRequest(const std::string& raw_request);
+struct Request {
+    explicit Request(const std::string& raw_request);
 
     std::string method;
     std::string path;

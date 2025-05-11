@@ -1,4 +1,4 @@
-#include "network/types.h"
+#include "network/request.h"
 
 #include <gtest/gtest.h>
 
@@ -12,11 +12,7 @@ TEST(TestHTTRequest, TestInitFromStream) {
         "{\"key\": \"testKey\", \"value\": \"testValue\", \"type\": "
         "\"string\"}";
 
-    network::HTTPRequest request{raw_request};
-    std::cerr << "Method: " << request.method << std::endl;
-    std::cerr << "Path: " << request.path << std::endl;
-    std::cerr << "Body: " << request.body << std::endl;
-    std::cerr << "Headers " << request.headers["Content-Length"] << std::endl;
+    network::Request request{raw_request};
     ASSERT_STREQ(request.method.c_str(), "POST");
     ASSERT_STREQ(request.path.c_str(), "/get");
     ASSERT_STREQ(request.headers["Content-Length"].c_str(), "58");

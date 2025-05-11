@@ -1,6 +1,4 @@
-#include "storage_router_adapter.h"
-
-#include "value.h"
+#include "storage/storage_router_adapter.h"
 
 #include <iostream>
 

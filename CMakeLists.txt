@@ -17,9 +17,9 @@ find_package(asio REQUIRED)
 add_library(
     kvstorage
     STATIC
-     src/storage.cpp
-     src/wal_logger.cpp
-     src/storage_router_adapter.cpp
+     src/storage/storage.cpp
+     src/storage/wal_logger.cpp
+     src/storage/storage_router_adapter.cpp
     )
 target_include_directories(kvstorage PUBLIC include)
 target_link_libraries(
@@ -28,11 +28,30 @@ target_link_libraries(
      nlohmann_json::nlohmann_json 
 )
 
+add_library(
+    network
+    STATIC
+     src/network/types.cpp
+    )
+target_include_directories(network PUBLIC include)
+target_link_libraries(
+    network
+    PUBLIC
+     nlohmann_json::nlohmann_json 
+)
+
+
 # Find Boost Asio (header-only, no need to link)
 
 add_executable(main main.cpp)
 add_dependencies(main kvstorage)
-target_link_libraries(main PRIVATE kvstorage  asio::asio)
+target_link_libraries(
+    main
+    PRIVATE
+     kvstorage 
+     network
+     asio::asio
+)
 
 # add_executable(http_server http_server.cpp)
 # target_link_libraries(http_server PRIVATE asio::asio)

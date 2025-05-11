@@ -1,7 +1,6 @@
-#include "wal_logger.h"
+#include "storage/wal_logger.h"
 
-#include "types.h"
-#include "utils.h"
+#include "storage/utils.h"
 
 #include <fstream>
 #include <iostream>

@@ -1,9 +1,7 @@
-#include "storage.h"
-#include "wal_logger.h"
+#include "storage/storage.h"
 
 #include <filesystem>
 #include <gtest/gtest.h>
-#include <memory>
 
 using storage::Storage;
 

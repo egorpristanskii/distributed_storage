@@ -1,12 +1,7 @@
-#include "storage.h"
-
-#include "types.h"
-#include "value.h"
+#include "storage/storage.h"
 
 #include <iostream>
 #include <nlohmann/json.hpp>
-#include <string>
-#include <string_view>
 
 namespace storage {
 Storage::Storage(const std::string& logFile)

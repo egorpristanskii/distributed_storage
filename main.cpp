@@ -1,5 +1,6 @@
-#include "router.h"
-#include "storage_router_adapter.h"
+#include "network/router.h"
+#include "network/types.h"
+#include "storage/storage_router_adapter.h"
 
 #include <asio.hpp>
 #include <asio/awaitable.hpp>
@@ -14,59 +15,23 @@ using asio::ip::tcp;
 using namespace std::literals;
 
 awaitable<void> session(tcp::socket socket, router::Router& router) {  // NOLINT
-    asio::streambuf buffer;
+    std::string raw_request;
+    char buf[1024];
+    std::size_t n =
+        co_await socket.async_read_some(asio::buffer(buf), use_awaitable);
+    raw_request.append(buf, n);
 
-    // Step 1: Read headers
-    std::size_t n = co_await asio::async_read_until(socket, buffer, "\r\n\r\n",
-                                                    use_awaitable);
-    std::istream stream(&buffer);
-    std::string request_line;
-    std::getline(stream, request_line);
-
-    // Step 2: Parse path
-    auto path_start = request_line.find(' ');
-    auto path_end = request_line.find(' ', path_start + 1);
-    std::string path =
-        request_line.substr(path_start + 1, path_end - path_start - 1);
-
-    std::cerr << path << std::endl;
-
-    // Step 3: Parse headers
-    std::string header_line;
-    std::size_t content_length = 0;
-    while (std::getline(stream, header_line) && header_line != "\r") {
-        if (!header_line.empty() && header_line.back() == '\r') {
-            header_line.pop_back();
-        }
-
-        if (header_line.starts_with("Content-Length:")) {  // NOLINT
-            content_length = std::stoul(header_line.substr(15));
-        }
-    }
-
-    // Step 4: Read body (if needed)
-    std::string body;
-    if (content_length > 0) {
-        if (buffer.size() < content_length) {
-            co_await asio::async_read(
-                socket, buffer,
-                asio::transfer_exactly(content_length - buffer.size()),
-                use_awaitable);
-        }
-        std::stringbuf body_buf;
-        body_buf.sputn(asio::buffer_cast<const char*>(buffer.data()),
-                       content_length);
-        body = body_buf.str();
-    }
+    network::HTTPRequest parsed_request(raw_request);
 
     // Step 5: Optional: parse JSON
     nlohmann::json json_body;
-    if (!body.empty()) {
-        json_body = nlohmann::json::parse(body);
+    if (!parsed_request.body.empty()) {
+        json_body = nlohmann::json::parse(parsed_request.body);
     }
 
     // Step 6: Route
-    std::string response_body = router.handleRoute(path, json_body);
+    std::string response_body =
+        router.handleRoute(parsed_request.path, json_body);
 
     nlohmann::json response_json = {{"status", "ok"},
                                     {"message", response_body}};

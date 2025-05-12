@@ -1,6 +1,5 @@
-#include "network/request.h"
-#include "network/response.h"
 #include "network/router.h"
+#include "network/session.h"
 #include "storage/storage_router_adapter.h"
 
 #include <asio.hpp>
@@ -18,33 +17,13 @@ using asio::use_awaitable;
 using asio::ip::tcp;
 using namespace std::literals;
 
-awaitable<void> session(tcp::socket socket,  // NOLINT
-                        std::shared_ptr<router::Router> router) {
-    std::string raw_request;
-    char buf[1024];
-    std::size_t n =
-        co_await socket.async_read_some(asio::buffer(buf), use_awaitable);
-    raw_request.append(buf, n);
-
-    network::Request parsed_request(raw_request);
-
-    nlohmann::json json_body;
-    if (!parsed_request.body.empty()) {
-        json_body = nlohmann::json::parse(parsed_request.body);
-    }
-
-    network::Response response =
-        router->handleRoute(parsed_request.path, json_body);
-    co_await asio::async_write(socket, asio::buffer(response.toString()),
-                               use_awaitable);
-}
-
 awaitable<void> listener(asio::io_context& ctx, unsigned short port,  // NOLINT
                          std::shared_ptr<router::Router> router) {
     tcp::acceptor acceptor(ctx, {tcp::v4(), port});
     for (;;) {
         tcp::socket socket = co_await acceptor.async_accept(use_awaitable);
-        asio::co_spawn(ctx, session(std::move(socket), router), asio::detached);
+        asio::co_spawn(ctx, network::Session(std::move(socket), router),
+                       asio::detached);
     }
 }
 

@@ -39,11 +39,13 @@ add_library(
     STATIC
      src/network/request.cpp
      src/network/response.cpp
+     src/network/session.cpp
     )
 target_include_directories(network PUBLIC include)
 target_link_libraries(
     network
     PUBLIC
+     asio::asio
      nlohmann_json::nlohmann_json 
 )
 
@@ -57,7 +59,6 @@ target_link_libraries(
     PRIVATE
      kvstorage 
      network
-     asio::asio
 )
 
 # add_executable(http_server http_server.cpp)

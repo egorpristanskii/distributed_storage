@@ -38,8 +38,8 @@ int main() {
         auto handler =
             std::make_shared<storage::StorageRouterAdapter>("/tmp/test.log");
 
-        router->addRoute("/get", *handler, &storage::StorageRouterAdapter::get);
-        router->addRoute("/put", *handler, &storage::StorageRouterAdapter::put);
+        router->addRoute("/get", handler, &storage::StorageRouterAdapter::get);
+        router->addRoute("/put", handler, &storage::StorageRouterAdapter::put);
 
         asio::co_spawn(
             ctx,

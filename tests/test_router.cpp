@@ -16,7 +16,7 @@ class TestHandler {
 
 TEST(TestRouter, TestPing) {
     auto test_router = router::Router();
-    auto test_handler = TestHandler();
+    auto test_handler = std::make_shared<TestHandler>();
     test_router.addRoute("ping", test_handler, &TestHandler::ping);
     network::Response result =
         test_router.handleRoute("ping", nlohmann::json::parse(kTestInput));

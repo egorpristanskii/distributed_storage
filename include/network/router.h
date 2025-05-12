@@ -18,11 +18,11 @@ class Router {
    public:
     template <typename TDelegator, typename THandler>
         requires ValidHandler<TDelegator, THandler>
-    void addRoute(const std::string& path, TDelegator& delegator,
-                  THandler handler) {
-        routes_[path] = [&delegator,
+    void addRoute(const std::string& path,
+                  std::shared_ptr<TDelegator> delegator, THandler handler) {
+        routes_[path] = [delegator = std::move(delegator),
                          handler](const json& request) -> network::Response {
-            return std::invoke(handler, delegator, request);
+            return std::mem_fn(handler)(delegator, request);
         };
     }
 

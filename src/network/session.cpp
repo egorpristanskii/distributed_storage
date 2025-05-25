@@ -1,5 +1,6 @@
 #include "network/session.h"
 
+#include "app.h"
 #include "network/request.h"
 #include "network/response.h"
 
@@ -11,8 +12,8 @@ constexpr int kBufferSize = 1024;
 
 namespace network {
 Session::Session(asio::ip::tcp::socket socket,
-                 std::shared_ptr<router::Router> router)
-    : socket_(std::move(socket)), router_(std::move(router)) {}
+                 std::shared_ptr<app::Application> app)
+    : socket_(std::move(socket)), app_(std::move(app)) {}
 
 asio::awaitable<void> Session::operator()() {
     std::string raw_request;
@@ -29,7 +30,7 @@ asio::awaitable<void> Session::operator()() {
     }
 
     network::Response response =
-        router_->handleRoute(parsed_request.path, json_body);
+        app_->handleRequest(parsed_request.path, json_body);
     co_await asio::async_write(socket_, asio::buffer(response.toString()),
                                asio::use_awaitable);
 }

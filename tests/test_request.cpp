@@ -14,7 +14,7 @@ TEST(TestHTTRequest, TestInitFromStream) {
 
     network::Request request{raw_request};
     ASSERT_STREQ(request.method.c_str(), "POST");
-    ASSERT_STREQ(request.path.c_str(), "/get");
+    ASSERT_STREQ(request.path.c_str(), "get");
     ASSERT_STREQ(request.headers["Content-Length"].c_str(), "58");
     ASSERT_STREQ(request.headers["Content-Type"].c_str(), "application/json");
     ASSERT_STREQ(request.body.c_str(),

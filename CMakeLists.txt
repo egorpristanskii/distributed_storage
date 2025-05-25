@@ -24,7 +24,7 @@ add_library(
      src/storage/storage.cpp
      src/storage/wal_logger.cpp
      src/storage/storage_router_adapter.cpp
-    )
+)
 target_include_directories(kvstorage PUBLIC include)
 target_link_libraries(
     kvstorage
@@ -40,7 +40,7 @@ add_library(
      src/network/request.cpp
      src/network/response.cpp
      src/network/session.cpp
-    )
+)
 target_include_directories(network PUBLIC include)
 target_link_libraries(
     network
@@ -49,16 +49,28 @@ target_link_libraries(
      nlohmann_json::nlohmann_json 
 )
 
+add_library(
+    app
+    STATIC
+     src/app.cpp
+    )
+target_include_directories(app PUBLIC include)
+target_link_libraries(
+    app
+    PUBLIC
+     kvstorage
+     network
+)
+add_dependencies(app kvstorage network)
 
 # Find Boost Asio (header-only, no need to link)
 
 add_executable(main main.cpp)
-add_dependencies(main kvstorage)
+add_dependencies(main app)
 target_link_libraries(
     main
     PRIVATE
-     kvstorage 
-     network
+     app
 )
 
 # add_executable(http_server http_server.cpp)

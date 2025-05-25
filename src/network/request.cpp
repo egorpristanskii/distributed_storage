@@ -13,6 +13,10 @@ Request::Request(const std::string& raw_request) {
 
     request_line >> method >> path;
 
+    if (!path.empty() && path.front() == '/') {
+        path.erase(0, 1);
+    }
+
     while (std::getline(stream, line) && line != "\r") {
         auto colon = line.find(':');
 

@@ -63,8 +63,6 @@ target_link_libraries(
 )
 add_dependencies(app kvstorage network)
 
-# Find Boost Asio (header-only, no need to link)
-
 add_executable(main main.cpp)
 add_dependencies(main app)
 target_link_libraries(

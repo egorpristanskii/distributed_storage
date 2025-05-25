@@ -8,6 +8,8 @@ Application::Application(const std::string& logFile)
     router_->addRoute("put", handler_, &storage::StorageRouterAdapter::put);
     router_->addRoute("remove", handler_,
                       &storage::StorageRouterAdapter::remove);
+    router_->addRoute("allkeys", handler_,
+                      &storage::StorageRouterAdapter::listAllData);
 }
 
 network::Response Application::handleRequest(const std::string& path,

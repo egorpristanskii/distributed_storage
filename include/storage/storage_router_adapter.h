@@ -16,7 +16,8 @@ class StorageRouterAdapter {
 
     network::Response remove(const json& request);
 
-    //  std::string listAllData(const json& request);
+    network::Response listAllData(const json& request);
+
    private:
     std::unique_ptr<Storage> storage_;
 };

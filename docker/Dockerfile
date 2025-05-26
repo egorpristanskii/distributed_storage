@@ -35,6 +35,10 @@ RUN groupadd -g $USER_GID -o $USERNAME \
         graphviz \
         # Required for conan
         python3-pip\
+        # For deb pacakge build
+        dpkg-dev \
+        fakeroot \
+        lintian \
     && update-locale \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME

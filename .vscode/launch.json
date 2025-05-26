@@ -5,7 +5,7 @@
       "name": "Launch Debug",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/build-debug/main",
+      "program": "${workspaceFolder}/build/build-debug/kvstorage_service",
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
     },
@@ -13,7 +13,7 @@
       "name": "Launch Release",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/build-release/main",
+      "program": "${workspaceFolder}/build/build-release/kvstorage_service",
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
     }

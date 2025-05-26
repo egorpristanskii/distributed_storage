@@ -44,6 +44,20 @@
             "dependsOn": ["CMake Configure Release"]
         },
         {
+            "label": "CPack Package (Release)",
+            "type": "shell",
+            "command": "cmake --build --preset=conan-release --target package",
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "dependsOn": ["CMake Build Release"]
+        },
+        {
             "label": "CMake Configure Release with Tests",
             "type": "shell",
             "command": "cmake --preset=conan-release -DENABLE_TESTS=ON",

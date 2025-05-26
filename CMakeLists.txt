@@ -63,19 +63,29 @@ target_link_libraries(
 )
 add_dependencies(app kvstorage network)
 
-add_executable(main main.cpp)
-add_dependencies(main app)
+add_executable(kvstorage_service main.cpp)
+add_dependencies(kvstorage_service app)
 target_link_libraries(
-    main
+    kvstorage_service
     PRIVATE
      app
 )
 
-# add_executable(http_server http_server.cpp)
-# target_link_libraries(http_server PRIVATE asio::asio)
 
 if (ENABLE_TESTS)
     include(CTest)
     enable_testing()
     add_subdirectory(tests)
 endif()
+
+
+install(TARGETS kvstorage_service DESTINATION /usr/local/bin)
+
+# CPack config for .deb package
+set(CPACK_GENERATOR "DEB")
+set(CPACK_PACKAGE_NAME "kvstorage")
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_CONTACT "pristanskiyee@gmail.com")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Egor Pristanskii")
+
+include(CPack)

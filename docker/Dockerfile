@@ -1,6 +1,6 @@
 # Dockerfile
 
-FROM e_pristanskii/base:latest
+FROM egorpristanskiy/ci_base:latest
 
 ARG USERNAME
 ARG USER

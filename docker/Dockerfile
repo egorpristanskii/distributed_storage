@@ -16,6 +16,8 @@ RUN mkdir -p /etc/sudoers.d && \
     chmod 0440 /etc/sudoers.d/$USERNAME
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    sudo \
+    openssh-client \
     vim \
     zsh \
     wget \

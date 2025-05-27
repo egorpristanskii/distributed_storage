@@ -1,69 +1,47 @@
-FROM ubuntu:24.04
+# Dockerfile
 
-# Disable Prompt During Packages Installation
-
-ARG DEBIAN_FRONTEND=noninteractive
+FROM e_pristanskii/base:latest
 
 ARG USERNAME
-
 ARG USER
 ARG USER_UID
 ARG USER_GID
 
-RUN userdel -r ubuntu
+RUN userdel -r ubuntu || true
 
-RUN groupadd -g $USER_GID -o $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \    
-    && apt-get update \
-    && apt-get install -y sudo \
-        wget \
-        cmake \
-        clang-19 \
-        clang-format-19 \
-        clang-tidy-19 \
-        clangd-19 \
-        libc++-19-dev \
-        libc++abi-19-dev \
-        git \
-        make \
-        vim \
-        zsh \
-        language-pack-en\
-        gdb \
-        # Required for plantuml render
-        default-jre \
-        graphviz \
-        # Required for conan
-        python3-pip\
-        # For deb pacakge build
-        dpkg-dev \
-        fakeroot \
-        lintian \
-    && update-locale \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME
+RUN mkdir -p /etc/sudoers.d && \
+    groupadd -g $USER_GID -o $USERNAME && \
+    useradd --uid $USER_UID --gid $USER_GID -m $USERNAME && \
+    echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME && \
+    chmod 0440 /etc/sudoers.d/$USERNAME
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    vim \
+    zsh \
+    wget \
+    git \
+    gdb \
+    language-pack-en \
+    # Required for plantUML render
+    default-jre \
+    graphviz \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    update-locale
 
 USER $USERNAME
+WORKDIR /home/$USERNAME
 
-RUN	sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || true
 
-
-WORKDIR /home/${USERNAME}/.oh-my-zsh/plugins
-
+WORKDIR /home/$USERNAME/.oh-my-zsh/plugins
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions.git && \
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
 
-# Install and setup Conan and pre-commit
-RUN pip install conan pre-commit --break-system-packages
-RUN ~/.local/bin/conan profile detect
-
-WORKDIR /home/${USERNAME}/.conan2/profiles
-
+WORKDIR /home/$USERNAME/.conan2/profiles
 COPY conanprofile default
 
-WORKDIR /home/${USERNAME}
-
+WORKDIR /home/$USERNAME
 COPY .zshrc .zshrc
 
-ENTRYPOINT [ "/bin/zsh" ]
+ENTRYPOINT ["/bin/zsh"]
 CMD ["zsh"]

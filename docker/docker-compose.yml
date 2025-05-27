@@ -1,8 +1,17 @@
 version: '3'
 
 services:
+  base:
+    image: e_pristanskii/base
+    container_name: base
+    tty: true
+    env_file:
+      - .env
+    build:
+      context: ./base
+      dockerfile: Dockerfile
   develop:
-    image: develop
+    image: e_pristanskii/develop
     container_name: devel
     user: ${USER_UID}:${USER_GID}
     tty: true

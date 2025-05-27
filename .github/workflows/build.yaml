@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: custom-runner
+    runs-on: ubuntu-latest
 
     container:
       image: egorpristanskiy/ci_base:latest   # Your custom Docker image with dev tools

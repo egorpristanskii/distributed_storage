@@ -83,3 +83,47 @@ jobs:
       - name: Run tests
         run: |
           ctest --preset=conan-release --output-on-failure
+
+  test_and_coverage:
+    runs-on: ubuntu-latest
+    needs: clang-format-check
+    env:
+      HOME: /root
+    container:
+      image: egorpristanskiy/ci_base:latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Install LLVM tools
+        run: |
+          pip install llvm-cov-cobertura
+
+      - name: Install Conan dependencies
+        run: |
+          conan install . --output-folder=build --build=missing -s build_type=Debug
+
+      - name: Configure with CMake for tests and coverage
+        run: |
+          cmake --preset=conan-debug -DENABLE_TESTS=ON -DCODE_COVERAGE=ON
+
+      - name: Build project with tests and coverage
+        run: |
+          cmake --build --preset=conan-debug -j$(nproc)
+
+      - name: Run tests with coverage
+        env:
+          LLVM_PROFILE_FILE: "coverage-%p.profraw"
+        run: |
+          ctest --preset=conan-debug --output-on-failure
+
+      - name: Generate coverage report
+        run: |
+          llvm-profdata-19 merge -sparse ./build/build-debug/tests/coverage-*.profraw -o ./build/build-debug/tests/coverage.profdata
+          llvm-cov-19 show ./build/build-debug/tests/storageTests -instr-profile=./build/build-debug/tests/coverage.profdata -format=html -output-dir=coverage-report -ignore-filename-regex='tests/'
+
+      - name: Upload HTML Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: html-coverage-report
+          path: coverage-report

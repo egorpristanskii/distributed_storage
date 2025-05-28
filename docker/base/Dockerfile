@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     clang-tidy-19 \
     libc++-19-dev \
     libc++abi-19-dev \
+    libclang-rt-19-dev \
+    llvm-19 \
     python3-pip \
     dpkg-dev \
     fakeroot \

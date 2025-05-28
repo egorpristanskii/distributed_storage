@@ -123,7 +123,7 @@ jobs:
           llvm-cov-19 show ./build/build-debug/tests/storageTests -instr-profile=./build/build-debug/tests/coverage.profdata -format=html -output-dir=coverage-report -ignore-filename-regex='tests/'
 
       - name: Upload HTML Coverage Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: html-coverage-report
           path: coverage-report

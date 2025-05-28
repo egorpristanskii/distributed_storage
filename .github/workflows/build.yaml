@@ -94,10 +94,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
-      - name: Install LLVM tools
-        run: |
-          pip install llvm-cov-cobertura
 
       - name: Install Conan dependencies
         run: |

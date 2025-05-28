@@ -5,6 +5,17 @@ project(kvstorage LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+option(CODE_COVERAGE "Enable coverage reporting" OFF)
+
+function(enable_coverage target_name)
+    if(CODE_COVERAGE)
+        message(STATUS "Building with code coverage flags")
+        target_compile_options(${target_name} PRIVATE -fprofile-instr-generate -fcoverage-mapping -O0 -g)
+        target_link_options(${target_name} PRIVATE -fprofile-instr-generate)
+    endif()
+endfunction()
+
+
 # set(SANITIZER_FLAGS "-fsanitize=address -fno-omit-frame-pointer -g")
 # set(SANITIZER_FLAGS "-fsanitize=address,undefined,leak")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
@@ -70,6 +81,11 @@ target_link_libraries(
     PRIVATE
      app
 )
+
+enable_coverage(kvstorage)
+enable_coverage(network)
+enable_coverage(app)
+enable_coverage(kvstorage_service)
 
 
 if (ENABLE_TESTS)

@@ -131,7 +131,7 @@
         {
             "label": "CMake Configure Debug with Tests",
             "type": "shell",
-            "command": "cmake --preset=conan-debug -DENABLE_TESTS=ON",
+            "command": "cmake --preset=conan-debug -DENABLE_TESTS=ON -DCODE_COVERAGE=ON",
             "group": "build",
             "problemMatcher": [],
             "presentation": {

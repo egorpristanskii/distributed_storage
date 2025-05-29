@@ -1,13 +1,6 @@
 version: '3'
 
 services:
-  base:
-    image: egorpristanskiy/ci_base
-    container_name: base
-    tty: true
-    build:
-      context: ./base
-      dockerfile: Dockerfile
   develop:
     image: e_pristanskii/develop
     container_name: devel

@@ -18,7 +18,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build image with Docker Compose
-        run: docker compose -f docker/docker-compose.yml build base
+        run: docker compose -f ./docker/docker-compose.yml build base
 
       - name: Tag image
         run: docker tag egorpristanskiy/ci_base egorpristanskiy/ci_base:latest

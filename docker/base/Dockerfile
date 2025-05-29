@@ -4,6 +4,8 @@ FROM ubuntu:24.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+COPY ubuntu.sources.list /etc/apt/sources.list
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     coreutils \

@@ -1,0 +1,6 @@
+# ubuntu.sources.list for 24.04
+# Required for running in CI
+deb http://mirror.kakao.com/ubuntu/ noble main restricted universe multiverse
+deb http://mirror.kakao.com/ubuntu/ noble-updates main restricted universe multiverse
+deb http://mirror.kakao.com/ubuntu/ noble-backports main restricted universe multiverse
+deb http://security.ubuntu.com/ubuntu noble-security main restricted universe multiverse

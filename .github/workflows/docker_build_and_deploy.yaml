@@ -19,8 +19,7 @@ jobs:
 
       - name: Build image with Docker Compose
         run: |
-          cd docker
-          docker compose build base
+          docker compose -f ./docker/docker-compose.yml build base
 
       - name: Tag image
         run: docker tag egorpristanskiy/ci_base egorpristanskiy/ci_base:latest

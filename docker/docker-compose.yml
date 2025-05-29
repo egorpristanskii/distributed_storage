@@ -5,8 +5,6 @@ services:
     image: egorpristanskiy/ci_base
     container_name: base
     tty: true
-    env_file:
-      - .env
     build:
       context: ./base
       dockerfile: Dockerfile

@@ -126,7 +126,9 @@ jobs:
 
   build_application_container:
     runs-on: ubuntu-latest
-    needs: build  # if you have a dependent job
+    needs: 
+      - build
+      - test_and_coverage
 
     env:
       DEB_PACKAGE: docker/docker-context/kvstorage-1.0.0-Linux.deb

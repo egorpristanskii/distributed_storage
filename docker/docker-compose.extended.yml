@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  kvstorage:
+    image: egorpristanskiy/kvstorage
+    container_name: kvstorage
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile.extended
+      args:
+        DEB_PACKAGE: ${DEB_PACKAGE}
+    ports:
+      - "8080:8080"
+    entrypoint: "/usr/local/bin/kvstorage_service"

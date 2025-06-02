@@ -1,0 +1,11 @@
+FROM egorpristanskiy/ci_base:latest
+
+ARG DEB_PACKAGE
+COPY ${DEB_PACKAGE} /tmp/package.deb
+
+RUN dpkg -i /tmp/package.deb || apt-get update && apt-get install -f -y && \
+    rm /tmp/package.deb && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+ENTRYPOINT ["/bin/bash"]
+CMD ["/bin/bash"]

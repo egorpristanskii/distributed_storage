@@ -134,6 +134,9 @@ jobs:
       DEB_PACKAGE: docker/docker-context/kvstorage-1.0.0-Linux.deb
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
@@ -148,7 +151,6 @@ jobs:
 
       - name: Build container
         run: |
-          ls -la ./docker/
           docker compose -f ./docker/docker-compose.extended.yml build kvstorage
 
       - name: Tag image

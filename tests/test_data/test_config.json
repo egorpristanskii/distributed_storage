@@ -1,0 +1,5 @@
+{
+ "logFile": "test_log.log",
+ "numThreads": 4,
+ "port": 8080
+}

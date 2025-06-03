@@ -3,17 +3,15 @@
 #include "network/response.h"
 #include "storage/value.h"
 
-#include <iostream>
+#include <logger/logger.h>
 #include <string>
 
 namespace storage {
 StorageRouterAdapter::StorageRouterAdapter(const std::string& logFile)
-    : storage_(std::make_unique<Storage>(logFile)) {
-    std::cout << "inited" << std::endl;
-}
+    : storage_(std::make_unique<Storage>(logFile)) {}
 
 network::Response StorageRouterAdapter::get(const json& request) {
-    std::cout << "Call get with request" << request.dump(4) << std::endl;
+    LOG_DEBUG("Call get with request {}", request.dump());
     std::string key = request["key"];
 
     ValuePtr value = storage_->get(key);
@@ -26,7 +24,7 @@ network::Response StorageRouterAdapter::get(const json& request) {
 }
 
 network::Response StorageRouterAdapter::put(const json& request) {
-    std::cout << "Call put with request" << request.dump(4) << std::endl;
+    LOG_DEBUG("Call put with request {}", request.dump());
     std::string key = request["key"];
     std::string value = request["value"];
     std::string type = request["type"];
@@ -54,9 +52,8 @@ network::Response StorageRouterAdapter::remove(const json& request) {
     return network::Response(400, "failed");
 }
 
-network::Response StorageRouterAdapter::listAllData(
-    const json& request) {  // NOLINT
-    std::cout << "Call listAllData with request" << std::endl;
+network::Response StorageRouterAdapter::listAllData(const json& request) {
+    LOG_DEBUG("Call list all data with request {}", request.dump());
     auto response_data = storage_->listAllData();
 
     return network::Response(200, response_data.dump());

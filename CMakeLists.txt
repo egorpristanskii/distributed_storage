@@ -28,6 +28,8 @@ include(${CMAKE_BINARY_DIR}/conan/conan_toolchain.cmake)
 
 find_package(nlohmann_json REQUIRED)
 find_package(asio REQUIRED)
+find_package(spdlog REQUIRED)
+
 
 add_library(
     kvstorage
@@ -41,7 +43,8 @@ target_link_libraries(
     kvstorage
     PUBLIC
      network
-     nlohmann_json::nlohmann_json 
+     nlohmann_json::nlohmann_json
+     spdlog::spdlog
 )
 add_dependencies(kvstorage network)
 
@@ -57,7 +60,8 @@ target_link_libraries(
     network
     PUBLIC
      asio::asio
-     nlohmann_json::nlohmann_json 
+     nlohmann_json::nlohmann_json
+     spdlog::spdlog
 )
 
 add_library(

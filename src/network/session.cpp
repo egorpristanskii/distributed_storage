@@ -1,6 +1,7 @@
 #include "network/session.h"
 
 #include "app.h"
+#include "logger/logger.h"
 #include "network/request.h"
 #include "network/response.h"
 
@@ -28,10 +29,13 @@ asio::awaitable<void> Session::operator()() {
     if (!parsed_request.body.empty()) {
         json_body = nlohmann::json::parse(parsed_request.body);
     }
-
+    LOG_INFO("Received {} request endpoint {} with body: {}",
+             parsed_request.method, parsed_request.path, parsed_request.body);
     network::Response response =
         app_->handleRequest(parsed_request.path, json_body);
     co_await asio::async_write(socket_, asio::buffer(response.toString()),
                                asio::use_awaitable);
+    LOG_INFO("Sent response {} with status code: {}", response.response_data,
+             response.status_code);
 }
 }  // namespace network

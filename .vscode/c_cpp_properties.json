@@ -7,7 +7,8 @@
                 "${workspaceFolder}/include",
                 "/home/devel/.conan2/p/asiof11004f89aeff/p/include",
                 "/home/devel/.conan2/p/nlohm0567ffc90cfc1/p/include",
-                "/home/devel/.conan2/p/b/gtest153f95ddd48b5/p/include"
+                "/home/devel/.conan2/p/b/gtest153f95ddd48b5/p/include",
+                "/home/devel/.conan2/p/spdlobdb473b7f52b9/s/src/include"
             ],
             "compilerPath": "/usr/bin/clang++-19",
             "cStandard": "c11",

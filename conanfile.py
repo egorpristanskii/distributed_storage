@@ -10,6 +10,7 @@ class BoostGTestConan(ConanFile):
         "asio/1.32.0",
         "gtest/1.15.0",
         "nlohmann_json/3.11.3",
+        "spdlog/1.13.0"
     )
 
     def layout(self):
@@ -34,7 +35,13 @@ class BoostGTestConan(ConanFile):
         cmake.install()
 
     def package_info(self):
-        self.cpp_info.libs = ["asio", "gtest", "gtest_main", "nlohmann_json"]
+        self.cpp_info.libs = [
+            "asio",
+            "gtest",
+            "gtest_main",
+            "nlohmann_json",
+            "spdlog",
+        ]
 
 # For install run
 # conan install . --output-folder=build --build=missing

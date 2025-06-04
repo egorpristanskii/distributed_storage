@@ -10,6 +10,7 @@ TEST(TestBuildConfig, TestBuildConfig) {
 
     app::Config config = app::buildConfig(log_file.string());
     ASSERT_EQ(config.logFile, "test_log.log");
+    ASSERT_EQ(config.storageFile, "test_storage.log");
     ASSERT_EQ(config.numThreads, 4);
     ASSERT_EQ(config.port, 8080);
 }

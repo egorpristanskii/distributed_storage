@@ -3,8 +3,12 @@
 #include "fstream"
 
 namespace app {
-Config::Config(std::string logFile, int numThreads, int port)
-    : logFile(std::move(logFile)), numThreads(numThreads), port(port) {}
+Config::Config(int numThreads, int port, std::string storageFile,
+               std::string logFile)
+    : numThreads(numThreads),
+      port(port),
+      storageFile(std::move(storageFile)),
+      logFile(std::move(logFile)) {}
 
 Config buildConfig(const std::string& configFile) {
     std::ifstream file(configFile);
@@ -13,8 +17,9 @@ Config buildConfig(const std::string& configFile) {
     }
     nlohmann::json json_config;
     file >> json_config;
-    return Config(json_config["logFile"].get<std::string>(),
-                  json_config["numThreads"].get<int>(),
-                  json_config["port"].get<int>());
+    return Config(json_config["numThreads"].get<int>(),
+                  json_config["port"].get<int>(),
+                  json_config["storageFile"].get<std::string>(),
+                  json_config["logFile"].get<std::string>());
 }
 }  // namespace app

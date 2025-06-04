@@ -1,6 +1,7 @@
 #include "storage/storage.h"
 
-#include <iostream>
+#include "logger/logger.h"
+
 #include <nlohmann/json.hpp>
 
 namespace storage {
@@ -25,7 +26,7 @@ Storage::Storage(const std::string& logFile)
         }
     }
     for (const auto& [key, value] : storage_) {
-        std::cout << key << " " << value->toString() << std::endl;
+        LOG_DEBUG("Key {} with value {}", key, value->toString());
     }
 }
 

@@ -1,9 +1,9 @@
 #include "storage/wal_logger.h"
 
+#include "logger/logger.h"
 #include "storage/utils.h"
 
 #include <fstream>
-#include <iostream>
 #include <mutex>
 #include <stdexcept>
 #include <string>
@@ -61,8 +61,7 @@ LogOperation WALLogger::recoverFromLog() {
             json log_entry = json::parse(log_line);
             processLog(recovered_storage, log_entry);
         } catch (const json::parse_error& error) {
-            std::cerr << "Skipping invalid log line with error" << error.what()
-                      << std::endl;
+            LOG_ERROR("Skipping invalid log line with error", error.what());
         }
     }
     return recovered_storage;

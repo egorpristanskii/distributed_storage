@@ -1,5 +1,7 @@
 #pragma once
 
+#include <spdlog/common.h>
+#include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
@@ -21,11 +23,16 @@
 #define LOG_CRITICAL(msg, ...) \
     spdlog::critical("[{}] " msg, __PRETTY_FUNCTION__, ##__VA_ARGS__)
 
-inline void init_logger() {
-    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] %v");
+namespace logger {
+class LoggerInitializer {
+   public:
+    explicit LoggerInitializer(std::string logFile);
 
-    auto logger = std::make_shared<spdlog::logger>("app", console_sink);
-    spdlog::set_default_logger(logger);
-    spdlog::set_level(spdlog::level::debug);  // or info, trace, etc.
-}
+    ~LoggerInitializer();
+
+    void init_logger();
+
+   private:
+    const std::string logFile_;
+};
+}  // namespace logger

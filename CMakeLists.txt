@@ -30,6 +30,13 @@ find_package(nlohmann_json REQUIRED)
 find_package(asio REQUIRED)
 find_package(spdlog REQUIRED)
 
+add_library(
+    logger
+    STATIC
+     src/logger/logger.cpp
+)
+target_link_libraries(logger PUBLIC spdlog::spdlog)
+target_include_directories(logger PUBLIC include)
 
 add_library(
     kvstorage
@@ -44,9 +51,9 @@ target_link_libraries(
     PUBLIC
      network
      nlohmann_json::nlohmann_json
-     spdlog::spdlog
+     logger
 )
-add_dependencies(kvstorage network)
+add_dependencies(kvstorage network logger)
 
 add_library(
     network
@@ -61,8 +68,9 @@ target_link_libraries(
     PUBLIC
      asio::asio
      nlohmann_json::nlohmann_json
-     spdlog::spdlog
+     logger
 )
+add_dependencies(network logger)
 
 add_library(
     app

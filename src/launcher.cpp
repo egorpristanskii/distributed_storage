@@ -16,7 +16,7 @@ asio::awaitable<void> listener(asio::io_context& ctx,
 }
 
 Launcher::Launcher(const Config& config)
-    : app(std::make_shared<Application>(config.logFile)) {}
+    : app(std::make_shared<Application>(config.storageFile)) {}
 
 void Launcher::run(const Config& config) {
     auto work_guard = asio::make_work_guard(ctx_);

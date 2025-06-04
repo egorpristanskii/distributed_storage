@@ -12,7 +12,7 @@ StorageRouterAdapter::StorageRouterAdapter(const std::string& logFile)
 
 network::Response StorageRouterAdapter::get(const json& request) {
     LOG_DEBUG("Call get with request {}", request.dump());
-    std::string key = request["key"];
+    std::string key = request["id"];
 
     ValuePtr value = storage_->get(key);
 
@@ -25,7 +25,7 @@ network::Response StorageRouterAdapter::get(const json& request) {
 
 network::Response StorageRouterAdapter::put(const json& request) {
     LOG_DEBUG("Call put with request {}", request.dump());
-    std::string key = request["key"];
+    std::string key = request["id"];
     std::string value = request["value"];
     std::string type = request["type"];
 
@@ -43,7 +43,7 @@ network::Response StorageRouterAdapter::put(const json& request) {
 }
 
 network::Response StorageRouterAdapter::remove(const json& request) {
-    std::string key = request["key"];
+    std::string key = request["id"];
     bool result = storage_->remove(key);
 
     if (result) {

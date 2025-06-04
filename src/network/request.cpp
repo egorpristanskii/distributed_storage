@@ -8,10 +8,12 @@ Request::Request(const std::string& raw_request) {
     std::istringstream stream(raw_request);
 
     std::string line;
+    std::string method_str;
     std::getline(stream, line);
     std::istringstream request_line(line);
 
-    request_line >> method >> path;
+    request_line >> method_str >> path;
+    method = kHTTPMethodMap.at(method_str);
 
     if (!path.empty() && path.front() == '/') {
         path.erase(0, 1);

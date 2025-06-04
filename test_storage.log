@@ -1,0 +1,5 @@
+{"key":"new_int","operation":"PUT","timestamp":1749057321016,"typename":"int","value":"122"}
+{"key":"new_int322","operation":"PUT","timestamp":1749057402212,"typename":"int","value":"122"}
+{"key":"new_int322","operation":"DELETE","timestamp":1749066343507,"typename":"","value":""}
+{"key":"new_test_value","operation":"PUT","timestamp":1749067502354,"typename":"std::string","value":"updated"}
+{"key":"new_test_value","operation":"DELETE","timestamp":1749068115390,"typename":"","value":""}

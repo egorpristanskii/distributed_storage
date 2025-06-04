@@ -1,4 +1,5 @@
 #include "app.h"
+#include "network/types.h"
 
 #include <filesystem>
 #include <gtest/gtest.h>
@@ -30,7 +31,8 @@ class AppTest : public ::testing::Test {
 };
 
 TEST_F(AppTest, TestListAllData) {
-    auto response = app_->handleRequest("allkeys", nlohmann::json{});
+    auto response = app_->handleRequest(network::HTTPMethod::GET, "allkeys",
+                                        nlohmann::json{});
     ASSERT_EQ(response.status_code, 200);
     ASSERT_STREQ(
         response.response_data.c_str(),
@@ -41,8 +43,9 @@ TEST_F(AppTest, TestListAllData) {
 }
 
 TEST_F(AppTest, TestGet) {
-    nlohmann::json request = {{"key", "testKey"}};
-    auto response = app_->handleRequest("get", request);
+    nlohmann::json request;
+    auto response =
+        app_->handleRequest(network::HTTPMethod::GET, "keys/testKey", request);
     ASSERT_EQ(response.status_code, 200);
     ASSERT_STREQ(response.response_data.c_str(), "testValue22");
     ASSERT_STREQ(response.toString().c_str(),
@@ -53,11 +56,11 @@ TEST_F(AppTest, TestGet) {
 }
 
 TEST_F(AppTest, TestPut) {
-    nlohmann::json request = {
-        {"key", "testaddkey"}, {"value", "updated"}, {"type", "string"}};
-    auto response = app_->handleRequest("put", request);
-    auto get_response =
-        app_->handleRequest("get", nlohmann::json{{"key", "testaddkey"}});
+    nlohmann::json request = {{"value", "updated"}, {"type", "string"}};
+    auto response = app_->handleRequest(network::HTTPMethod::POST,
+                                        "keys/testaddkey", request);
+    auto get_response = app_->handleRequest(
+        network::HTTPMethod::GET, "keys/testaddkey", nlohmann::json{});
 
     ASSERT_EQ(get_response.status_code, 200);
     ASSERT_STREQ(get_response.response_data.c_str(), "updated");
@@ -76,10 +79,11 @@ TEST_F(AppTest, TestPut) {
 }
 
 TEST_F(AppTest, TestRemove) {
-    nlohmann::json request = {{"key", "testKey22"}};
-    auto response = app_->handleRequest("remove", request);
-    auto get_response =
-        app_->handleRequest("get", nlohmann::json{{"key", "testKey22"}});
+    nlohmann::json request;
+    auto response = app_->handleRequest(network::HTTPMethod::DELETE,
+                                        "keys/testKey22", request);
+    auto get_response = app_->handleRequest(network::HTTPMethod::GET,
+                                            "keys/testKey22", nlohmann::json{});
     ASSERT_EQ(get_response.status_code, 400);
     ASSERT_STREQ(get_response.response_data.c_str(), "");
     ASSERT_STREQ(get_response.toString().c_str(),

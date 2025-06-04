@@ -4,6 +4,7 @@
 #include "logger/logger.h"
 #include "network/request.h"
 #include "network/response.h"
+#include "network/types.h"
 
 #include <asio/awaitable.hpp>
 
@@ -30,9 +31,10 @@ asio::awaitable<void> Session::operator()() {
         json_body = nlohmann::json::parse(parsed_request.body);
     }
     LOG_INFO("Received {} request endpoint {} with body: {}",
-             parsed_request.method, parsed_request.path, parsed_request.body);
-    network::Response response =
-        app_->handleRequest(parsed_request.path, json_body);
+             kHTTPMethodStringMap.at(parsed_request.method),
+             parsed_request.path, parsed_request.body);
+    network::Response response = app_->handleRequest(
+        parsed_request.method, parsed_request.path, json_body);
     co_await asio::async_write(socket_, asio::buffer(response.toString()),
                                asio::use_awaitable);
     LOG_INFO("Sent response {} with status code: {}", response.response_data,

@@ -1,5 +1,6 @@
 #include "network/response.h"
 #include "network/router.h"
+#include "network/types.h"
 
 #include <gtest/gtest.h>
 
@@ -17,9 +18,10 @@ class TestHandler {
 TEST(TestRouter, TestPing) {
     auto test_router = router::Router();
     auto test_handler = std::make_shared<TestHandler>();
-    test_router.addRoute("ping", test_handler, &TestHandler::ping);
-    network::Response result =
-        test_router.handleRoute("ping", nlohmann::json::parse(kTestInput));
+    test_router.addRoute(network::HTTPMethod::GET, "ping", test_handler,
+                         &TestHandler::ping);
+    network::Response result = test_router.handleRoute(
+        network::HTTPMethod::GET, "ping", nlohmann::json::parse(kTestInput));
     ASSERT_EQ(result.status_code, 222);
     ASSERT_STREQ(result.response_data.c_str(), "pong");
     ASSERT_STREQ(result.toString().c_str(),

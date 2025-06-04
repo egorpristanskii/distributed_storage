@@ -9,7 +9,8 @@ class Application {
     explicit Application(const std::string& logFile);
 
     [[nodiscard]] network::Response handleRequest(
-        const std::string& path, const nlohmann::json& request);
+        const network::HTTPMethod& method, const std::string& path,
+        const nlohmann::json& request);
 
    private:
     std::shared_ptr<router::Router> router_;

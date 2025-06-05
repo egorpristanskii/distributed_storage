@@ -19,6 +19,10 @@ CMakeUserPresets.json
 *.dylib
 *.dll
 
+# python
+__pycache__
+*.pyc
+
 # Fortran module files
 *.mod
 *.smod
@@ -36,3 +40,6 @@ CMakeUserPresets.json
 
 # Ctest output
 *Testing
+
+# log files
+*.log

@@ -10,7 +10,8 @@ class BoostGTestConan(ConanFile):
         "asio/1.32.0",
         "gtest/1.15.0",
         "nlohmann_json/3.11.3",
-        "spdlog/1.13.0"
+        "spdlog/1.13.0",
+        "cli11/2.3.2",
     )
 
     def layout(self):
@@ -41,6 +42,7 @@ class BoostGTestConan(ConanFile):
             "gtest_main",
             "nlohmann_json",
             "spdlog",
+            "cli11"
         ]
 
 # For install run

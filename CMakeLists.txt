@@ -29,6 +29,7 @@ include(${CMAKE_BINARY_DIR}/conan/conan_toolchain.cmake)
 find_package(nlohmann_json REQUIRED)
 find_package(asio REQUIRED)
 find_package(spdlog REQUIRED)
+find_package(CLI11 REQUIRED)
 
 add_library(
     logger
@@ -37,6 +38,18 @@ add_library(
 )
 target_link_libraries(logger PUBLIC spdlog::spdlog)
 target_include_directories(logger PUBLIC include)
+
+add_library(
+    cli_processor
+    STATIC
+     src/cli/launcher.cpp
+)
+target_include_directories(cli_processor PUBLIC include)
+target_link_libraries(
+    cli_processor
+    PUBLIC
+     CLI11::CLI11
+)
 
 add_library(
     kvstorage
@@ -89,17 +102,20 @@ target_link_libraries(
 add_dependencies(app kvstorage network)
 
 add_executable(kvstorage_service main.cpp)
-add_dependencies(kvstorage_service app)
+add_dependencies(kvstorage_service app cli_processor)
 target_link_libraries(
     kvstorage_service
     PRIVATE
      app
+     cli_processor
 )
 
 enable_coverage(kvstorage)
 enable_coverage(network)
 enable_coverage(app)
 enable_coverage(kvstorage_service)
+enable_coverage(logger)
+enable_coverage(cli_processor)
 
 
 if (ENABLE_TESTS)

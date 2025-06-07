@@ -26,7 +26,7 @@ jobs:
       HOME: /root
 
     container:
-      image: egorpristanskiy/ci_base:latest   # Your custom Docker image with dev tools
+      image: egorpristanskiy/ci_base:latest
 
     steps:
       - name: Checkout code
@@ -93,6 +93,9 @@ jobs:
   clang_tidy:
     runs-on: ubuntu-latest
     needs: build
+    env:
+      HOME: /root
+
     container:
       image: egorpristanskiy/ci_base:latest
     steps:

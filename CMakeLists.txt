@@ -21,8 +21,6 @@ endfunction()
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
 # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SANITIZER_FLAGS}")
 
-# set(CMAKE_CXX_CLANG_TIDY "clang-tidy-19;--config-file=/home/devel/workspace/.clang-tidy")
-
 # Include Conan-generated files
 include(${CMAKE_BINARY_DIR}/conan/conan_toolchain.cmake)
 

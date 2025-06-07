@@ -10,7 +10,7 @@ class CLILauncher {
 
     int parse(int argc, char* argv[]);
 
-    [[nodiscard]] std::string getConfigFile() const noexcept;
+    [[nodiscard]] std::string getConfigFile() const;
 
    private:
     CLI::App cli_app_;

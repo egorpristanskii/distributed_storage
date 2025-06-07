@@ -12,7 +12,7 @@ class Value {
     virtual ~Value() = default;
     virtual std::string toString() const = 0;
     virtual std::unique_ptr<Value> cloneData() const = 0;
-    virtual std::string_view typeName() const noexcept = 0;
+    virtual std::string_view typeName() const = 0;
     [[nodiscard]] virtual std::map<std::string, std::string> mapView()
         const = 0;
 };
@@ -30,7 +30,7 @@ class TypedData : public Value {
     template <NotString Udata = TData>
     explicit TypedData(const std::string& data) : data_(fromString(data)) {}
 
-    inline TData fromString(const std::string& data) noexcept;
+    inline TData fromString(const std::string& data);
 
     std::string toString() const override {
         if constexpr (std::is_same_v<TData, std::string>) {
@@ -48,7 +48,7 @@ class TypedData : public Value {
         return {{"value", toString()}, {"type", std::string(typeName())}};
     }
 
-    [[nodiscard]] std::string_view typeName() const noexcept override {
+    [[nodiscard]] std::string_view typeName() const override {
         return TName.view();
     }
 
@@ -57,13 +57,12 @@ class TypedData : public Value {
 };
 
 template <>
-inline int TypedData<int>::fromString(const std::string& data) noexcept {
+inline int TypedData<int>::fromString(const std::string& data) {
     return std::stoi(data);
 }
 
 template <>
-inline std::string TypedData<std::string>::fromString(
-    const std::string& data) noexcept {
+inline std::string TypedData<std::string>::fromString(const std::string& data) {
     return data;
 }
 

@@ -29,11 +29,12 @@ class Router {
     void addRoute(const network::HTTPMethod& method, const std::string& path,
                   std::shared_ptr<TDelegator> delegator, THandler handler) {
         auto [pattern, param_names] = parsePath(path);
-        Route route{method, std::regex(pattern), param_names,
-                    [delegator, handler = std::move(handler)](
-                        const json& request) -> network::Response {
-                        return std::mem_fn(handler)(delegator, request);
-                    }};
+        Route route{
+            method, std::regex(pattern), param_names,
+            [delegator = std::move(delegator), handler = std::move(handler)](
+                const json& request) -> network::Response {
+                return std::mem_fn(handler)(delegator, request);
+            }};
         route_list_.emplace_back(std::move(route));
     }
 

@@ -22,7 +22,7 @@ int CLILauncher::parse(int argc, char* argv[]) {
     return 0;
 }
 
-std::string CLILauncher::getConfigFile() const noexcept {
+std::string CLILauncher::getConfigFile() const {
     return config_file_;
 }
 }  // namespace cli

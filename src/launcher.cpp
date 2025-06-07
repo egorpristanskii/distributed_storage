@@ -3,8 +3,8 @@
 #include "network/session.h"
 
 namespace app {
-asio::awaitable<void> listener(asio::io_context& ctx,
-                               unsigned short port,  // NOLINT
+asio::awaitable<void> listener(asio::io_context& ctx,  // NOLINT
+                               unsigned short port,
                                std::shared_ptr<app::Application> app) {
     asio::ip::tcp::acceptor acceptor(ctx, {asio::ip::tcp::v4(), port});
     for (;;) {

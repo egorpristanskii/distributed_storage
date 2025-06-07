@@ -98,7 +98,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
+      - name: Install Conan dependencies
+        run: |
+          conan install . --output-folder=build --build=missing -s build_type=Release
+
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:

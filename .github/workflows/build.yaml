@@ -123,16 +123,23 @@ jobs:
         run: |
           ctest --preset=conan-debug --output-on-failure
 
-      - name: Generate coverage report
+      - name: Generate coverage reports
         run: |
           llvm-profdata-19 merge -sparse ./build/build-debug/tests/coverage-*.profraw -o ./build/build-debug/tests/coverage.profdata
           llvm-cov-19 show ./build/build-debug/tests/storageTests -instr-profile=./build/build-debug/tests/coverage.profdata -format=html -output-dir=coverage-report -ignore-filename-regex='tests/'
+          llvm-cov-19 export ./build/build-debug/tests/storageTests -instr-profile=./build/build-debug/tests/coverage.profdata -format=lcov > coverage.lcov
 
       - name: Upload HTML Coverage Report
         uses: actions/upload-artifact@v4
         with:
           name: html-coverage-report
           path: coverage-report
+      
+      - name: Upload to Coveralls
+        uses: coverallsapp/action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: coverage.lcov
 
   build_application_container:
     runs-on: ubuntu-latest

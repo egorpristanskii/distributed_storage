@@ -1,7 +1,10 @@
 name: CI
 
 on:
-  workflow_dispatch:  # Manual trigger only
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   clang-format-check:
@@ -136,7 +139,7 @@ jobs:
           path: coverage-report
       
       - name: Upload to Coveralls
-        uses: coverallsapp/action@v2
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: coverage.lcov

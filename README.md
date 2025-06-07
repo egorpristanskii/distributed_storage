@@ -1,6 +1,6 @@
 # Distributed key-value storage
 
-[![CI Status](https://github.com/egorpristanskii/distributed_storage/actions/workflows/build.yaml/badge.svg)](https://github.com/egorpristanskii/distributed_storage/actions/workflows/build.yaml) [![Coverage Status](https://coveralls.io/repos/github/egorpristanskii/distributed_storage/badge.svg)](https://coveralls.io/github/egorpristanskii/distributed_storage)
+[![CI Status](https://github.com/egorpristanskii/distributed_storage/actions/workflows/build.yaml/badge.svg)](https://github.com/egorpristanskii/distributed_storage/actions/workflows/build.yaml) [![Coverage Status](https://coveralls.io/repos/github/egorpristanskii/distributed_storage/badge.svg?branch=main)](https://coveralls.io/github/egorpristanskii/distributed_storage?branch=main)
 
 ## Local build
 

@@ -1,4 +1,4 @@
-name: Manual C++ Build
+name: CI
 
 on:
   workflow_dispatch:  # Manual trigger only

@@ -8,6 +8,7 @@ COPY ubuntu.sources.list /etc/apt/sources.list
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
+    curl \
     coreutils \
     cmake \
     clang-19 \

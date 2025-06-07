@@ -1,6 +1,11 @@
 name: Docker Compose Build & Push
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docker/**'
   workflow_dispatch:
 
 jobs:

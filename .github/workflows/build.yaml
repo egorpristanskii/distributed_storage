@@ -103,7 +103,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-results
-          path: .
+          path: build/build-release
 
       - name: Run clang-tidy
         run: |
@@ -154,6 +154,7 @@ jobs:
     needs: 
       - build
       - test_and_coverage
+      - clang_tidy
 
     env:
       DEB_PACKAGE: docker-context/kvstorage-1.0.0-Linux.deb

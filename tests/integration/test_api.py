@@ -19,7 +19,7 @@ import requests
                 {
                     "path": "keys/integration_test_key",
                     "method": "POST",
-                    "headers": {"Content-Type": "application/x-www-form-urlencoded"},
+                    "headers": {"Content-Type": "application/json"},
                     "params": {"value": "testValue", "type": "string"}
                 },
                 {
@@ -62,7 +62,7 @@ import requests
         ]
 )
 def test_endpoints(service_url, service_request, expected_result):
-    endpoint = f"{service_url}/{service_request["path"]}"
+    endpoint = f"{service_url}/{service_request['path']}"
     print(f"Testing endpoint: {endpoint} with request: {service_request}")
     response = requests.request(
         method=service_request["method"],

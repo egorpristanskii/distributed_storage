@@ -1,14 +1,16 @@
 #include "network/response.h"
 
+#include "network/http_codes.h"
+
 #include <format>
 
 namespace network {
 std::string Response::toString() const {
     return std::format(
-        "HTTP/1.1 {} OK\r\n"  // TODO (e_pristanskiy) update status codes creation
+        "HTTP/1.1 {}\r\n"
         "Content-Type: application/json\r\n"
         "Content-Length: {}\r\n\r\n"
         "{}",
-        status_code, response_data.size(), response_data);
+        kHTTPCodeToString.at(status_code), response_data.size(), response_data);
 }
 }  // namespace network

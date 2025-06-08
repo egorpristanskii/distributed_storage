@@ -2,6 +2,7 @@
 
 #include "app.h"
 #include "logger/logger.h"
+#include "network/http_codes.h"
 #include "network/request.h"
 #include "network/response.h"
 #include "network/types.h"
@@ -38,6 +39,8 @@ asio::awaitable<void> Session::operator()() {
     co_await asio::async_write(socket_, asio::buffer(response.toString()),
                                asio::use_awaitable);
     LOG_INFO("Sent response {} with status code: {}", response.response_data,
-             response.status_code);
+             kHTTPCodeToString.at(response.status_code));
+    socket_.shutdown(asio::ip::tcp::socket::shutdown_both);
+    socket_.close();
 }
 }  // namespace network

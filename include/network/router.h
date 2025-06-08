@@ -1,4 +1,5 @@
 #pragma once
+#include "network/http_codes.h"
 #include "network/response.h"
 #include "network/types.h"
 
@@ -54,7 +55,7 @@ class Router {
                 return route.handler(request);
             }
         }
-        return network::Response(404, "Not Found");
+        return network::Response(network::HTTPCode::NotFound, "");
     }
 
    private:

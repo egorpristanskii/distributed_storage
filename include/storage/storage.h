@@ -13,10 +13,10 @@ class Storage {
    public:
     explicit Storage(const std::string& logFile);
 
-    bool put(const std::string& key, ValuePtr value);
+    std::unique_ptr<Value> put(const std::string& key, ValuePtr value);
     bool remove(const std::string& key);
     std::unique_ptr<Value> get(const std::string& key);
-    json listAllData() const;
+    json listAllData();
 
    protected:
     std::unordered_map<std::string, ValuePtr> storage_;

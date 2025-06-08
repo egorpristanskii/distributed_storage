@@ -1,4 +1,5 @@
 #include "app.h"
+#include "network/http_codes.h"
 #include "network/types.h"
 
 #include <filesystem>
@@ -33,7 +34,7 @@ class AppTest : public ::testing::Test {
 TEST_F(AppTest, TestListAllData) {
     auto response = app_->handleRequest(network::HTTPMethod::GET, "allkeys",
                                         nlohmann::json{});
-    ASSERT_EQ(response.status_code, 200);
+    ASSERT_EQ(response.status_code, network::HTTPCode::OK);
     ASSERT_STREQ(
         response.response_data.c_str(),
         "{\"new_int\":{\"type\":\"int\",\"value\":\"122\"},"
@@ -46,13 +47,16 @@ TEST_F(AppTest, TestGet) {
     nlohmann::json request;
     auto response =
         app_->handleRequest(network::HTTPMethod::GET, "keys/testKey", request);
-    ASSERT_EQ(response.status_code, 200);
-    ASSERT_STREQ(response.response_data.c_str(), "testValue22");
+    ASSERT_EQ(response.status_code, network::HTTPCode::OK);
+    ASSERT_STREQ(response.response_data.c_str(),
+                 "{\"key\":\"testKey\",\"type\":\"std::string\",\"value\":"
+                 "\"testValue22\"}");
     ASSERT_STREQ(response.toString().c_str(),
                  "HTTP/1.1 200 OK\r\n"
                  "Content-Type: application/json\r\n"
-                 "Content-Length: 11\r\n\r\n"
-                 "testValue22");
+                 "Content-Length: 60\r\n\r\n"
+                 "{\"key\":\"testKey\",\"type\":\"std::string\",\"value\":"
+                 "\"testValue22\"}");
 }
 
 TEST_F(AppTest, TestPut) {
@@ -62,20 +66,26 @@ TEST_F(AppTest, TestPut) {
     auto get_response = app_->handleRequest(
         network::HTTPMethod::GET, "keys/testaddkey", nlohmann::json{});
 
-    ASSERT_EQ(get_response.status_code, 200);
-    ASSERT_STREQ(get_response.response_data.c_str(), "updated");
+    ASSERT_EQ(get_response.status_code, network::HTTPCode::OK);
+    ASSERT_STREQ(get_response.response_data.c_str(),
+                 "{\"key\":\"testaddkey\",\"type\":\"std::string\",\"value\":"
+                 "\"updated\"}");
     ASSERT_STREQ(get_response.toString().c_str(),
                  "HTTP/1.1 200 OK\r\n"
                  "Content-Type: application/json\r\n"
-                 "Content-Length: 7\r\n\r\n"
-                 "updated");
-    ASSERT_EQ(response.status_code, 200);
-    ASSERT_STREQ(response.response_data.c_str(), "success");
+                 "Content-Length: 59\r\n\r\n"
+                 "{\"key\":\"testaddkey\",\"type\":\"std::string\",\"value\":"
+                 "\"updated\"}");
+    ASSERT_EQ(response.status_code, network::HTTPCode::OK);
+    ASSERT_STREQ(response.response_data.c_str(),
+                 "{\"key\":\"testaddkey\",\"type\":\"std::string\",\"value\":"
+                 "\"updated\"}");
     ASSERT_STREQ(response.toString().c_str(),
                  "HTTP/1.1 200 OK\r\n"
                  "Content-Type: application/json\r\n"
-                 "Content-Length: 7\r\n\r\n"
-                 "success");
+                 "Content-Length: 59\r\n\r\n"
+                 "{\"key\":\"testaddkey\",\"type\":\"std::string\",\"value\":"
+                 "\"updated\"}");
 }
 
 TEST_F(AppTest, TestRemove) {
@@ -84,17 +94,18 @@ TEST_F(AppTest, TestRemove) {
                                         "keys/testKey22", request);
     auto get_response = app_->handleRequest(network::HTTPMethod::GET,
                                             "keys/testKey22", nlohmann::json{});
-    ASSERT_EQ(get_response.status_code, 400);
-    ASSERT_STREQ(get_response.response_data.c_str(), "");
+    ASSERT_EQ(get_response.status_code, network::HTTPCode::NotFound);
+    ASSERT_STREQ(get_response.response_data.c_str(),
+                 "{\"error\":\"Key not found\"}");
     ASSERT_STREQ(get_response.toString().c_str(),
-                 "HTTP/1.1 400 OK\r\n"
+                 "HTTP/1.1 404 Not Found\r\n"
+                 "Content-Type: application/json\r\n"
+                 "Content-Length: 25\r\n\r\n"
+                 "{\"error\":\"Key not found\"}");
+    ASSERT_EQ(response.status_code, network::HTTPCode::NoContent);
+    ASSERT_STREQ(response.response_data.c_str(), "");
+    ASSERT_STREQ(response.toString().c_str(),
+                 "HTTP/1.1 204 No Content\r\n"
                  "Content-Type: application/json\r\n"
                  "Content-Length: 0\r\n\r\n");
-    ASSERT_EQ(response.status_code, 200);
-    ASSERT_STREQ(response.response_data.c_str(), "success");
-    ASSERT_STREQ(response.toString().c_str(),
-                 "HTTP/1.1 200 OK\r\n"
-                 "Content-Type: application/json\r\n"
-                 "Content-Length: 7\r\n\r\n"
-                 "success");
 }

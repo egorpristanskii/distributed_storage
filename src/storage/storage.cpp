@@ -30,12 +30,12 @@ Storage::Storage(const std::string& logFile)
     }
 }
 
-bool Storage::put(const std::string& key, ValuePtr value) {
+std::unique_ptr<Value> Storage::put(const std::string& key, ValuePtr value) {
     std::unique_lock<std::shared_mutex> lock_guard(mtx_);
     operation_logger_->logOperation("PUT", key, value->toString(),
                                     value->typeName());
     storage_[key] = std::move(value);
-    return true;
+    return storage_[key]->cloneData();
 }
 
 bool Storage::remove(const std::string& key) {
@@ -56,7 +56,8 @@ ValuePtr Storage::get(const std::string& key) {
     return nullptr;
 }
 
-json Storage::listAllData() const {
+json Storage::listAllData() {
+    std::shared_lock<std::shared_mutex> lock_guard(mtx_);
     json response;
     for (const auto& [key, value] : storage_) {
         response[key] = value->mapView();

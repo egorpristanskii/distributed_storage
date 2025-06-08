@@ -89,6 +89,7 @@ add_library(
      src/app.cpp
      src/config.cpp
      src/launcher.cpp
+     src/listener.cpp
     )
 target_include_directories(app PUBLIC include)
 target_link_libraries(

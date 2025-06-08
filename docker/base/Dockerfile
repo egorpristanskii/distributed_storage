@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     lintian \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN pip install conan pre-commit --break-system-packages && \
+RUN pip install conan pre-commit pytest --break-system-packages && \
     conan profile detect
 
 WORKDIR /root/.conan2/profiles

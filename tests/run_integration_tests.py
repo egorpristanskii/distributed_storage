@@ -30,7 +30,7 @@ def run_service():
     env["LLVM_PROFILE_FILE"] = "coverage-%p.profraw"
 
     proc = subprocess.Popen(
-        [SERVICE_PATH, "--config", "/tmp/config.json"],
+        [SERVICE_PATH, "--config", CONFIG_PATH],
         env=env,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,

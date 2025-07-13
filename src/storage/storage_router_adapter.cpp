@@ -9,8 +9,9 @@
 #include <string>
 
 namespace storage {
-StorageRouterAdapter::StorageRouterAdapter(const std::string& logFile)
-    : storage_(std::make_unique<Storage>(logFile)) {}
+StorageRouterAdapter::StorageRouterAdapter(
+    std::shared_ptr<WALLogger> operation_logger)
+    : storage_(std::make_unique<Storage>(std::move(operation_logger))) {}
 
 network::Response StorageRouterAdapter::get(const json& request) {
     LOG_DEBUG("Call get with request {}", request.dump());

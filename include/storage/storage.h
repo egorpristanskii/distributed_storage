@@ -11,7 +11,7 @@
 namespace storage {
 class Storage {
    public:
-    explicit Storage(const std::string& logFile);
+    explicit Storage(std::shared_ptr<WALLogger> operation_logger);
 
     std::unique_ptr<Value> put(const std::string& key, ValuePtr value);
     bool remove(const std::string& key);
@@ -20,7 +20,7 @@ class Storage {
 
    protected:
     std::unordered_map<std::string, ValuePtr> storage_;
-    std::unique_ptr<WALLogger> operation_logger_;
+    std::shared_ptr<WALLogger> operation_logger_;
     std::shared_mutex mtx_;
 };
 }  // namespace storage

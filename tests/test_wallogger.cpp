@@ -22,6 +22,7 @@ class WALLoggerTest : public ::testing::Test {
 
 TEST_F(WALLoggerTest, LogOperationPut) {
     logger_->logOperation("PUT", "key1", "value1", "std::string");
+    logger_->flushLog();
 
     std::ifstream file(log_file_);
     ASSERT_TRUE(file.is_open());
@@ -39,6 +40,7 @@ TEST_F(WALLoggerTest, LogOperationPut) {
 
 TEST_F(WALLoggerTest, LogOperationDelete) {
     logger_->logOperation("DELETE", "key1", "", "std::string");
+    logger_->flushLog();
 
     std::ifstream file(log_file_);
     ASSERT_TRUE(file.is_open());
@@ -57,6 +59,7 @@ TEST_F(WALLoggerTest, LogOperationDelete) {
 TEST_F(WALLoggerTest, RecoverFromLogPutOperation) {
     logger_->logOperation("PUT", "key1", "value1", "std::string");
     logger_->logOperation("PUT", "key2", "value2", "std::string");
+    logger_->flushLog();
 
     storage::LogOperation recovered_storage = logger_->recoverFromLog();
 
@@ -70,6 +73,7 @@ TEST_F(WALLoggerTest, RecoverFromLogPutOperation) {
 TEST_F(WALLoggerTest, RecoverFromLogDeleteOperation) {
     logger_->logOperation("PUT", "key1", "value1", "std::string");
     logger_->logOperation("DELETE", "key1", "", "std::string");
+    logger_->flushLog();
 
     storage::LogOperation recovered_storage = logger_->recoverFromLog();
 
@@ -80,6 +84,7 @@ TEST_F(WALLoggerTest, RecoverFromLogMixedOperations) {
     logger_->logOperation("PUT", "key1", "value1", "std::string");
     logger_->logOperation("PUT", "key2", "value2", "std::string");
     logger_->logOperation("DELETE", "key1", "", "std::string");
+    logger_->flushLog();
 
     storage::LogOperation recovered_storage = logger_->recoverFromLog();
 

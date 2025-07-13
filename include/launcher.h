@@ -17,6 +17,7 @@ class Launcher {
     std::shared_ptr<Application> app;
 
    private:
+    std::shared_ptr<storage::WALLogger> operation_logger_;
     asio::io_context ctx_;
 };
 }  // namespace app

@@ -2,6 +2,7 @@
 #include "logger/logger.h"
 #include "network/http_codes.h"
 #include "network/types.h"
+#include "storage/wal_logger.h"
 
 #include <asio.hpp>
 #include <asio/co_spawn.hpp>
@@ -21,7 +22,9 @@ class AppTest : public ::testing::Test {
         std::filesystem::copy_file(
             log_file, copy_log_file,
             std::filesystem::copy_options::overwrite_existing);
-        app_ = std::make_shared<app::Application>(copy_log_file);
+        auto operation_logger =
+            std::make_shared<storage::WALLogger>(copy_log_file);
+        app_ = std::make_shared<app::Application>(operation_logger);
         logger_initializer_.init_logger();
     }
 

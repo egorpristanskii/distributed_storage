@@ -1,12 +1,15 @@
 #include "storage/storage.h"
 
 #include "logger/logger.h"
+#include "storage/types.h"
+#include "storage/wal_logger.h"
 
+#include <cstddef>
 #include <nlohmann/json.hpp>
 
 namespace storage {
-Storage::Storage(const std::string& logFile)
-    : operation_logger_(std::make_unique<WALLogger>(logFile)) {
+Storage::Storage(std::shared_ptr<WALLogger> operation_logger)
+    : operation_logger_(std::move(operation_logger)) {
     auto recovery_log = operation_logger_->recoverFromLog();
     for (const auto& [key, typed_value] : recovery_log) {
         auto type_it = kStringToType.find(typed_value.first);

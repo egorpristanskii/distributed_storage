@@ -2,11 +2,14 @@
 
 #include "network/response.h"
 #include "storage/storage.h"
+#include "storage/wal_logger.h"
+
+#include <memory>
 
 namespace storage {
 class StorageRouterAdapter {
    public:
-    explicit StorageRouterAdapter(const std::string& logFile);
+    explicit StorageRouterAdapter(std::shared_ptr<WALLogger> operation_logger);
 
     ~StorageRouterAdapter() = default;
 

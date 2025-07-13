@@ -14,17 +14,29 @@ WALLogger::WALLogger(const std::string& logFile)
     std::ofstream file(logFile_, std::ios::app);
 }
 
+WALLogger::~WALLogger() {
+    flushLog();
+}
+
 void WALLogger::logOperation(const std::string& operation,
                              const std::string& key, const std::string& value,
                              const std::string_view& typeName) {
     std::unique_lock<std::mutex> lock_guard(mtx_);
+    log_queue_.emplace(json{{"timestamp", getUTCTimeStamp()},
+                            {"operation", operation},
+                            {"key", key},
+                            {"value", value},
+                            {"typename", typeName}});
+}
+
+void WALLogger::flushLog() {
+    std::unique_lock<std::mutex> lock_guard(mtx_);
     std::ofstream file(logFile_, std::ios::app);
-    json entry = {{"timestamp", getUTCTimeStamp()},
-                  {"operation", operation},
-                  {"key", key},
-                  {"value", value},
-                  {"typename", typeName}};
-    file << entry.dump() << std::endl;
+    while (!log_queue_.empty()) {
+        auto entry = log_queue_.front();
+        log_queue_.pop();
+        file << entry.dump() << std::endl;
+    }
     file.flush();
 }
 

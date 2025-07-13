@@ -8,9 +8,10 @@
 #include <asio/awaitable.hpp>
 
 namespace app {
-Application::Application(const std::string& logFile)
+Application::Application(std::shared_ptr<storage::WALLogger> operation_logger)
     : router_(std::make_shared<router::Router>()),
-      handler_(std::make_shared<storage::StorageRouterAdapter>(logFile)) {
+      handler_(
+          std::make_shared<storage::StorageRouterAdapter>(operation_logger)) {
     router_->addRoute(network::HTTPMethod::GET, "keys/{id}", handler_,
                       &storage::StorageRouterAdapter::get);
     router_->addRoute(network::HTTPMethod::POST, "keys/{id}", handler_,
@@ -19,7 +20,6 @@ Application::Application(const std::string& logFile)
                       &storage::StorageRouterAdapter::remove);
     router_->addRoute(network::HTTPMethod::GET, "allkeys", handler_,
                       &storage::StorageRouterAdapter::listAllData);
-
     auto app_handler = [this](const network::Request& request) {
         return this->asyncHandleRequest(request);
     };

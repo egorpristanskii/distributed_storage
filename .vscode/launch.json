@@ -8,6 +8,7 @@
       "program": "${workspaceFolder}/build/build-debug/kvstorage_service",
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
+      "args": ["--config", "tests/test_data/test_config.json"]
     },
     {
       "name": "Launch Release",
@@ -16,6 +17,7 @@
       "program": "${workspaceFolder}/build/build-release/kvstorage_service",
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
+      "args": ["--config", "tests/test_data/test_config.json"]
     }
   ]
 }

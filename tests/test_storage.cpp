@@ -26,7 +26,8 @@ class StorageTest : public ::testing::Test {
 };
 
 TEST_F(StorageTest, PutAndGet) {
-    Storage storage(kTestLogFile_);
+    auto operation_logger = std::make_shared<storage::WALLogger>(kTestLogFile_);
+    Storage storage(operation_logger);
 
     storage.put("key1", std::make_unique<StringData>("value1"));
     storage.put("key2", std::make_unique<IntData>("42"));
@@ -41,7 +42,8 @@ TEST_F(StorageTest, PutAndGet) {
 }
 
 TEST_F(StorageTest, Remove) {
-    Storage storage(kTestLogFile_);
+    auto operation_logger = std::make_shared<storage::WALLogger>(kTestLogFile_);
+    Storage storage(operation_logger);
 
     storage.put("key1", std::make_unique<StringData>("value1"));
     storage.remove("key1");
@@ -52,12 +54,14 @@ TEST_F(StorageTest, Remove) {
 
 TEST_F(StorageTest, RecoveryFromLog) {
     {
-        Storage storage(kTestLogFile_);
+        auto operation_logger =
+            std::make_shared<storage::WALLogger>(kTestLogFile_);
+        Storage storage(operation_logger);
         storage.put("key1", std::make_unique<StringData>("value1"));
         storage.put("key2", std::make_unique<IntData>("42"));
     }
-
-    Storage recovered_storage(kTestLogFile_);
+    auto operation_logger = std::make_shared<storage::WALLogger>(kTestLogFile_);
+    Storage recovered_storage(operation_logger);
 
     auto value1 = recovered_storage.get("key1");
     ASSERT_NE(value1, nullptr);
@@ -69,7 +73,8 @@ TEST_F(StorageTest, RecoveryFromLog) {
 }
 
 TEST_F(StorageTest, listAllData) {
-    Storage storage(kTestLogFile_);
+    auto operation_logger = std::make_shared<storage::WALLogger>(kTestLogFile_);
+    Storage storage(operation_logger);
     storage.put("key1", std::make_unique<StringData>("value1"));
     storage.put("key2", std::make_unique<IntData>("42"));
 

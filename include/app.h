@@ -11,7 +11,7 @@
 namespace app {
 class Application {
    public:
-    explicit Application(const std::string& logFile);
+    explicit Application(std::shared_ptr<storage::WALLogger> operation_logger);
 
     [[nodiscard]] network::Response handleRequest(
         const network::Request& request);

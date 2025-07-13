@@ -15,8 +15,10 @@ int main(int argc, char* argv[]) {
         logger_initializer.init_logger();
         app::Launcher launcher(config);
         launcher.run(config);
-
     } catch (const std::exception& e) {
         LOG_ERROR("Fatal error: {}", e.what());
+    } catch (...) {
+        LOG_ERROR("Unknown exception");
     }
+    return 0;
 }

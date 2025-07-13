@@ -28,8 +28,8 @@ Application::Application(const std::string& logFile)
                     .buildPipeline(app_handler);
 }
 
-asio::awaitable<network::Response> Application::processRequest(
-    const network::Request& request) {
+asio::awaitable<network::Response> Application::asyncProcessRequest(
+    network::Request request) {
     auto response = co_await pipeline_(request);
     co_return response;
 }

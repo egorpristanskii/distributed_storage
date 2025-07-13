@@ -16,8 +16,8 @@ class Application {
     [[nodiscard]] network::Response handleRequest(
         const network::Request& request);
 
-    [[nodiscard]] asio::awaitable<network::Response> processRequest(
-        const network::Request& request);
+    [[nodiscard]] asio::awaitable<network::Response> asyncProcessRequest(
+        network::Request request);
 
    private:
     std::shared_ptr<router::Router> router_;

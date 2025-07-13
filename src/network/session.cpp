@@ -53,7 +53,8 @@ asio::awaitable<void> Session::operator()() {
         parsed_request.body.assign(body_buf.begin(), body_buf.end());
     }
 
-    network::Response response = co_await app_->processRequest(parsed_request);
+    network::Response response =
+        co_await app_->asyncProcessRequest(parsed_request);
 
     co_await asio::async_write(socket_, asio::buffer(response.toString()),
                                asio::use_awaitable);

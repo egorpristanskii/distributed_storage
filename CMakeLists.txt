@@ -72,6 +72,8 @@ add_library(
      src/network/request.cpp
      src/network/response.cpp
      src/network/session.cpp
+     src/middleware/middleware.cpp
+    src/middleware/log_middleware.cpp
 )
 target_include_directories(network PUBLIC include)
 target_link_libraries(
@@ -115,7 +117,6 @@ enable_coverage(app)
 enable_coverage(kvstorage_service)
 enable_coverage(logger)
 enable_coverage(cli_processor)
-
 
 if (ENABLE_TESTS)
     include(CTest)

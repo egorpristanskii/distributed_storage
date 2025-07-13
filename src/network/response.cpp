@@ -13,4 +13,8 @@ std::string Response::toString() const {
         "{}",
         kHTTPCodeToString.at(status_code), response_data.size(), response_data);
 }
+
+std::string_view Response::HTTPCodeToString() const {
+    return kHTTPCodeToString.at(status_code);
+}
 }  // namespace network

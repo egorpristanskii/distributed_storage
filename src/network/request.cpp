@@ -38,4 +38,9 @@ Request::Request(const std::string& raw_request) {
         stream.read(body.data(), content_length);
     }
 }
+
+Request::Request(const HTTPMethod& http_method, std::string path,
+                 std::string body)
+    : method(http_method), path(std::move(path)), body(std::move(body)) {}
+
 }  // namespace network

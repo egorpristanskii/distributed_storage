@@ -32,8 +32,8 @@ class AppTest : public ::testing::Test {
 };
 
 TEST_F(AppTest, TestListAllData) {
-    auto response = app_->handleRequest(network::HTTPMethod::GET, "allkeys",
-                                        nlohmann::json{});
+    auto response = app_->handleRequest(
+        {network::HTTPMethod::GET, "allkeys", nlohmann::json{}.dump()});
     ASSERT_EQ(response.status_code, network::HTTPCode::OK);
     ASSERT_STREQ(
         response.response_data.c_str(),
@@ -45,8 +45,8 @@ TEST_F(AppTest, TestListAllData) {
 
 TEST_F(AppTest, TestGet) {
     nlohmann::json request;
-    auto response =
-        app_->handleRequest(network::HTTPMethod::GET, "keys/testKey", request);
+    auto response = app_->handleRequest(
+        {network::HTTPMethod::GET, "keys/testKey", request.dump()});
     ASSERT_EQ(response.status_code, network::HTTPCode::OK);
     ASSERT_STREQ(response.response_data.c_str(),
                  "{\"key\":\"testKey\",\"type\":\"std::string\",\"value\":"
@@ -61,10 +61,10 @@ TEST_F(AppTest, TestGet) {
 
 TEST_F(AppTest, TestPut) {
     nlohmann::json request = {{"value", "updated"}, {"type", "string"}};
-    auto response = app_->handleRequest(network::HTTPMethod::POST,
-                                        "keys/testaddkey", request);
+    auto response = app_->handleRequest(
+        {network::HTTPMethod::POST, "keys/testaddkey", request.dump()});
     auto get_response = app_->handleRequest(
-        network::HTTPMethod::GET, "keys/testaddkey", nlohmann::json{});
+        {network::HTTPMethod::GET, "keys/testaddkey", nlohmann::json{}.dump()});
 
     ASSERT_EQ(get_response.status_code, network::HTTPCode::OK);
     ASSERT_STREQ(get_response.response_data.c_str(),
@@ -90,10 +90,10 @@ TEST_F(AppTest, TestPut) {
 
 TEST_F(AppTest, TestRemove) {
     nlohmann::json request;
-    auto response = app_->handleRequest(network::HTTPMethod::DELETE,
-                                        "keys/testKey22", request);
-    auto get_response = app_->handleRequest(network::HTTPMethod::GET,
-                                            "keys/testKey22", nlohmann::json{});
+    auto response = app_->handleRequest(
+        {network::HTTPMethod::DELETE, "keys/testKey22", request.dump()});
+    auto get_response = app_->handleRequest(
+        {network::HTTPMethod::GET, "keys/testKey22", nlohmann::json{}.dump()});
     ASSERT_EQ(get_response.status_code, network::HTTPCode::NotFound);
     ASSERT_STREQ(get_response.response_data.c_str(),
                  "{\"error\":\"Key not found\"}");

@@ -6,8 +6,10 @@
 namespace network {
 struct Response {
     HTTPCode status_code;
-    const std::string response_data;
+    std::string response_data;
 
     std::string toString() const;
+
+    std::string_view HTTPCodeToString() const;
 };
 }  // namespace network

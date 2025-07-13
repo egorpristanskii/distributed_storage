@@ -1,11 +1,8 @@
 #include "network/session.h"
 
 #include "app.h"
-#include "logger/logger.h"
-#include "network/http_codes.h"
 #include "network/request.h"
 #include "network/response.h"
-#include "network/types.h"
 
 #include <asio/awaitable.hpp>
 
@@ -56,23 +53,10 @@ asio::awaitable<void> Session::operator()() {
         parsed_request.body.assign(body_buf.begin(), body_buf.end());
     }
 
-    nlohmann::json json_body;
-    if (!parsed_request.body.empty()) {
-        json_body = nlohmann::json::parse(parsed_request.body);
-    }
-
-    LOG_INFO("Received {} request endpoint {} with body: {}",
-             kHTTPMethodStringMap.at(parsed_request.method),
-             parsed_request.path, parsed_request.body);
-
-    network::Response response = app_->handleRequest(
-        parsed_request.method, parsed_request.path, json_body);
+    network::Response response = co_await app_->processRequest(parsed_request);
 
     co_await asio::async_write(socket_, asio::buffer(response.toString()),
                                asio::use_awaitable);
-
-    LOG_INFO("Sent response {} with status code: {}", response.response_data,
-             kHTTPCodeToString.at(response.status_code));
 
     socket_.shutdown(asio::ip::tcp::socket::shutdown_both);
     socket_.close();

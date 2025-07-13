@@ -10,8 +10,8 @@
 namespace app {
 Application::Application(std::shared_ptr<storage::WALLogger> operation_logger)
     : router_(std::make_shared<router::Router>()),
-      handler_(
-          std::make_shared<storage::StorageRouterAdapter>(operation_logger)) {
+      handler_(std::make_shared<storage::StorageRouterAdapter>(
+          std::move(operation_logger))) {
     router_->addRoute(network::HTTPMethod::GET, "keys/{id}", handler_,
                       &storage::StorageRouterAdapter::get);
     router_->addRoute(network::HTTPMethod::POST, "keys/{id}", handler_,
